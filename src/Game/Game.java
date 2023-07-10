@@ -24,10 +24,14 @@ public class Game extends JFrame {
 	private JButton quitButton = new JButton(quitButtonBasicImage);
 
 
+	private Image selectedImage = new ImageIcon(Main.class.getResource("../images/sangil_start.jpg")).getImage();
+	
 	private Image background = new ImageIcon(Main.class.getResource("../images/introBackground.jpg")).getImage();
 	
 	
 	private int mouseX, mouseY;
+	
+	private boolean isMainScreen = false;
 	
 	public Game() {
 		setUndecorated(true); // 메뉴바가 안보이게 됨
@@ -96,6 +100,7 @@ public class Game extends JFrame {
 				startButton.setVisible(false);
 				quitButton.setVisible(false);
 				background = new ImageIcon(Main.class.getResource("../images/mainBackground.jpg")).getImage();
+				isMainScreen = true;
 			}
 		});
 		add(startButton);
@@ -141,6 +146,9 @@ public class Game extends JFrame {
 
 	private void screenDraw(Graphics g) {
 		g.drawImage(background, 0, 0, null); // 자주 바뀔 수 있는 이미지를 그리기 (0,0부터)
+		if (isMainScreen) {
+			g.drawImage(selectedImage, 340, 100, null);
+		}
 		paintComponents(g); // 항상 고정되는 이미지를 그리기
 		this.repaint();
 	}

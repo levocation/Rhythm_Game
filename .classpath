@@ -6,6 +6,6 @@
 		</attributes>
 	</classpathentry>
 	<classpathentry kind="src" path="src"/>
-	<classpathentry kind="lib" path="C:/Users/도제/Desktop/Workspace/Rhythm_Game/src/resources/jlayer-1.0.1.jar"/>
+	<classpathentry kind="lib" path="C:/Users/tjsgh/Desktop/Eclipse Workspace/Rhythm_Game/src/resources/jlayer-1.0.1.jar"/>
 	<classpathentry kind="output" path="bin"/>
 </classpath>
