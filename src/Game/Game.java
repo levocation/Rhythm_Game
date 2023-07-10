@@ -19,15 +19,24 @@ public class Game extends JFrame {
 	private ImageIcon startButtonBasicImage = new ImageIcon(Main.class.getResource("../images/startButtonBasic.png"));
 	private ImageIcon quitButtonBasicImage = new ImageIcon(Main.class.getResource("../images/quitButtonBasic.png"));
 
+	private ImageIcon leftButtonBasicImage = new ImageIcon(Main.class.getResource("../images/leftButtonBasic.png"));
+	private ImageIcon leftButtonEnteredImage = new ImageIcon(Main.class.getResource("../images/leftButtonEntered.png"));
+	private ImageIcon rightButtonBasicImage = new ImageIcon(Main.class.getResource("../images/rightButtonBasic.png"));
+	private ImageIcon rightButtonEnteredImage = new ImageIcon(Main.class.getResource("../images/rightButtonEntered.png"));
+
 	private JButton exitButton = new JButton(exitButtonBasicImage);
 	private JButton startButton = new JButton(startButtonBasicImage);
 	private JButton quitButton = new JButton(quitButtonBasicImage);
+	private JButton leftButton = new JButton(leftButtonBasicImage);
+	private JButton rightButton = new JButton(rightButtonBasicImage);
 
 
 	private Image selectedImage = new ImageIcon(Main.class.getResource("../images/sangil_start.jpg")).getImage();
 	
 	private Image background = new ImageIcon(Main.class.getResource("../images/introBackground.jpg")).getImage();
-	
+
+	private JTextField songName = new JTextField("상읾미디어고 교가");
+	private JTextField artistName = new JTextField("상일미디어고");
 	
 	private int mouseX, mouseY;
 	
@@ -99,6 +108,10 @@ public class Game extends JFrame {
 			public void mousePressed(MouseEvent e) {
 				startButton.setVisible(false);
 				quitButton.setVisible(false);
+				leftButton.setVisible(true);
+				rightButton.setVisible(true);
+				songName.setVisible(true);
+				artistName.setVisible(true);
 				background = new ImageIcon(Main.class.getResource("../images/mainBackground.jpg")).getImage();
 				isMainScreen = true;
 			}
@@ -128,6 +141,53 @@ public class Game extends JFrame {
 		});
 		add(quitButton);
 		
+		// leftButton
+		leftButton.setBounds(140, 310, 60, 60);
+		leftButton.setBorderPainted(false);
+		leftButton.setContentAreaFilled(false);
+		leftButton.setFocusPainted(false);
+		leftButton.addMouseListener(new MouseAdapter() {
+			public void mouseEntered(MouseEvent e) {
+				rightButton.setIcon(leftButtonEnteredImage);
+				leftButton.setCursor(new Cursor(Cursor.HAND_CURSOR));
+			}
+			public void mouseExited(MouseEvent e) {
+				rightButton.setIcon(leftButtonBasicImage);
+				leftButton.setCursor(new Cursor(Cursor.DEFAULT_CURSOR));
+			}
+			public void mousePressed(MouseEvent e) {
+				// 왼쪽 버튼 이벤트
+			}
+		});
+		add(leftButton);
+		
+		// rightButton
+		rightButton.setBounds(140, 310, 60, 60);
+		rightButton.setBorderPainted(false);
+		rightButton.setContentAreaFilled(false);
+		rightButton.setFocusPainted(false);
+		rightButton.addMouseListener(new MouseAdapter() {
+			public void mouseEntered(MouseEvent e) {
+				rightButton.setIcon(rightButtonEnteredImage);
+				rightButton.setCursor(new Cursor(Cursor.HAND_CURSOR));
+			}
+			public void mouseExited(MouseEvent e) {
+				rightButton.setIcon(rightButtonBasicImage);
+				rightButton.setCursor(new Cursor(Cursor.DEFAULT_CURSOR));
+			}
+			public void mousePressed(MouseEvent e) {
+				// 오른쪽 버튼 이벤트
+			}
+		});
+		add(rightButton);
+
+		songName.setBounds(140, 310, 200, 200);
+		songName.setSize(400, 400);
+		artistName.setBounds(140, 310, 150, 150);
+		artistName.setSize(400, 400);
+		
+		add(songName);
+		add(artistName);
 		
 		add(menuBar);
 		
