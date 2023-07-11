@@ -1,215 +1,538 @@
 package Game;
 
-import java.awt.*;
-import java.awt.event.MouseAdapter;
-import java.awt.event.MouseEvent;
-import java.awt.event.MouseMotionAdapter;
+import java.awt.Color;
+import java.awt.Font;
+import java.awt.Graphics2D;
+import java.awt.Image;
+import java.awt.RenderingHints;
+import java.util.ArrayList;
 
-import javax.swing.*;
+import javax.swing.ImageIcon;
 
-public class Game extends JFrame {
+public class Game extends Thread {
 	
-	private Image screenImage;
-	private Graphics screenGraphic;
-
-	// 이미지 가져오기
-	private JLabel menuBar = new JLabel(new ImageIcon(Main.class.getResource("../images/menuBar.jpg")));
-
-	private ImageIcon exitButtonBasicImage = new ImageIcon(Main.class.getResource("../images/exitButtonBasic.png"));
-	private ImageIcon startButtonBasicImage = new ImageIcon(Main.class.getResource("../images/startButtonBasic.png"));
-	private ImageIcon quitButtonBasicImage = new ImageIcon(Main.class.getResource("../images/quitButtonBasic.png"));
-
-	private ImageIcon leftButtonBasicImage = new ImageIcon(Main.class.getResource("../images/leftButtonBasic.png"));
-	private ImageIcon leftButtonEnteredImage = new ImageIcon(Main.class.getResource("../images/leftButtonEntered.png"));
-	private ImageIcon rightButtonBasicImage = new ImageIcon(Main.class.getResource("../images/rightButtonBasic.png"));
-	private ImageIcon rightButtonEnteredImage = new ImageIcon(Main.class.getResource("../images/rightButtonEntered.png"));
-
-	private JButton exitButton = new JButton(exitButtonBasicImage);
-	private JButton startButton = new JButton(startButtonBasicImage);
-	private JButton quitButton = new JButton(quitButtonBasicImage);
-	private JButton leftButton = new JButton(leftButtonBasicImage);
-	private JButton rightButton = new JButton(rightButtonBasicImage);
-
-
-	private Image selectedImage = new ImageIcon(Main.class.getResource("../images/sangil_start.jpg")).getImage();
+	private Image gameInfoImage = new ImageIcon(Main.class.getResource("../images/gameInfo.png")).getImage();
+	private Image judgementLineImage = new ImageIcon(Main.class.getResource("../images/judgementLine.png")).getImage();
 	
-	private Image background = new ImageIcon(Main.class.getResource("../images/introBackground.jpg")).getImage();
+	private Image noteRouteImage_4B = new ImageIcon(Main.class.getResource("../images/noteRoute_4B.png")).getImage();
+	private Image noteRouteImage_5B = new ImageIcon(Main.class.getResource("../images/noteRoute_5B.png")).getImage();
+	private Image noteRouteImage_6B = new ImageIcon(Main.class.getResource("../images/noteRoute_6B.png")).getImage();
+	private Image noteRouteImage_7B = new ImageIcon(Main.class.getResource("../images/noteRoute_7B.png")).getImage();
+	
+	private Image noteRouteLineImage = new ImageIcon(Main.class.getResource("../images/noteRouteLine.png")).getImage();
+	
+	//private Image noteBasicImage_4B = new ImageIcon(Main.class.getResource("../images/noteBasic_4B.png")).getImage();
+	//private Image noteBasicImage_5B = new ImageIcon(Main.class.getResource("../images/noteBasic_5B.png")).getImage();
+	//private Image noteBasicImage_6B = new ImageIcon(Main.class.getResource("../images/noteBasic_6B.png")).getImage();
+	//private Image noteBasicImage_7B = new ImageIcon(Main.class.getResource("../images/noteBasic_7B.png")).getImage();
 
-	private JTextField songName = new JTextField("상읾미디어고 교가");
-	private JTextField artistName = new JTextField("상일미디어고");
-	
-	private int mouseX, mouseY;
-	
-	private boolean isMainScreen = false;
-	
-	public Game() {
-		setUndecorated(true); // 메뉴바가 안보이게 됨
-		setTitle("VectroBeat");
-		setSize(Main.SCREEN_WIDTH, Main.SCREEN_HEIGHT);
-		setResizable(false);
-		setLocationRelativeTo(null); // 창을 화면의 가운데에 띄움
-		setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE); // 윈도우창 종료시 프로세스까지 닫을 수 있음
-		setVisible(true);
-		setBackground(new Color(0, 0, 0, 0));
-		setLayout(null);
-		
-		menuBar.setBounds(0, 0, 1280, 30);
-		menuBar.addMouseListener(new MouseAdapter() {
-			@Override
-			public void mousePressed(MouseEvent e) {
-				mouseX = e.getX();
-				mouseY = e.getY();
-			}
-		});
-		menuBar.addMouseMotionListener(new MouseMotionAdapter() {
-			@Override
-			public void mouseDragged(MouseEvent e) {
-				int x = e.getXOnScreen();
-				int y = e.getYOnScreen();
-				setLocation(x - mouseX, y - mouseY);
-			}
-		});
-		
-		// exitButton
-		exitButton.setBounds(1245, 0, 30, 30);
-		exitButton.setBorderPainted(false);
-		exitButton.setContentAreaFilled(false);
-		exitButton.setFocusPainted(false);
-		exitButton.addMouseListener(new MouseAdapter() {
-			public void mouseEntered(MouseEvent e) {
-				exitButton.setCursor(new Cursor(Cursor.HAND_CURSOR));
-			}
-			public void mouseExited(MouseEvent e) {
-				exitButton.setCursor(new Cursor(Cursor.DEFAULT_CURSOR));
-			}
-			public void mousePressed(MouseEvent e) {
-				try {
-					Thread.sleep(1000);
-				} catch (InterruptedException ex) {
-					ex.printStackTrace();
-				}
-				System.exit(0);
-			}
-		});
-		add(exitButton);
-		
-		// startButton
-		startButton.setBounds(800, 200, 400, 100);
-		startButton.setBorderPainted(false);
-		startButton.setContentAreaFilled(false);
-		startButton.setFocusPainted(false);
-		startButton.addMouseListener(new MouseAdapter() {
-			public void mouseEntered(MouseEvent e) {
-				startButton.setCursor(new Cursor(Cursor.HAND_CURSOR));
-			}
-			public void mouseExited(MouseEvent e) {
-				startButton.setCursor(new Cursor(Cursor.DEFAULT_CURSOR));
-			}
-			public void mousePressed(MouseEvent e) {
-				startButton.setVisible(false);
-				quitButton.setVisible(false);
-				leftButton.setVisible(true);
-				rightButton.setVisible(true);
-				songName.setVisible(true);
-				artistName.setVisible(true);
-				background = new ImageIcon(Main.class.getResource("../images/mainBackground.jpg")).getImage();
-				isMainScreen = true;
-			}
-		});
-		add(startButton);
-		
-		// quitButton
-		quitButton.setBounds(800, 330, 400, 100);
-		quitButton.setBorderPainted(false);
-		quitButton.setContentAreaFilled(false);
-		quitButton.setFocusPainted(false);
-		quitButton.addMouseListener(new MouseAdapter() {
-			public void mouseEntered(MouseEvent e) {
-				quitButton.setCursor(new Cursor(Cursor.HAND_CURSOR));
-			}
-			public void mouseExited(MouseEvent e) {
-				quitButton.setCursor(new Cursor(Cursor.DEFAULT_CURSOR));
-			}
-			public void mousePressed(MouseEvent e) {
-				try {
-					Thread.sleep(1000);
-				} catch (InterruptedException ex) {
-					ex.printStackTrace();
-				}
-				System.exit(0);
-			}
-		});
-		add(quitButton);
-		
-		// leftButton
-		leftButton.setBounds(140, 310, 60, 60);
-		leftButton.setBorderPainted(false);
-		leftButton.setContentAreaFilled(false);
-		leftButton.setFocusPainted(false);
-		leftButton.addMouseListener(new MouseAdapter() {
-			public void mouseEntered(MouseEvent e) {
-				rightButton.setIcon(leftButtonEnteredImage);
-				leftButton.setCursor(new Cursor(Cursor.HAND_CURSOR));
-			}
-			public void mouseExited(MouseEvent e) {
-				rightButton.setIcon(leftButtonBasicImage);
-				leftButton.setCursor(new Cursor(Cursor.DEFAULT_CURSOR));
-			}
-			public void mousePressed(MouseEvent e) {
-				// 왼쪽 버튼 이벤트
-			}
-		});
-		add(leftButton);
-		
-		// rightButton
-		rightButton.setBounds(140, 310, 60, 60);
-		rightButton.setBorderPainted(false);
-		rightButton.setContentAreaFilled(false);
-		rightButton.setFocusPainted(false);
-		rightButton.addMouseListener(new MouseAdapter() {
-			public void mouseEntered(MouseEvent e) {
-				rightButton.setIcon(rightButtonEnteredImage);
-				rightButton.setCursor(new Cursor(Cursor.HAND_CURSOR));
-			}
-			public void mouseExited(MouseEvent e) {
-				rightButton.setIcon(rightButtonBasicImage);
-				rightButton.setCursor(new Cursor(Cursor.DEFAULT_CURSOR));
-			}
-			public void mousePressed(MouseEvent e) {
-				// 오른쪽 버튼 이벤트
-			}
-		});
-		add(rightButton);
+	private Image noteRoutePressedImage_4B = new ImageIcon(Main.class.getResource("../images/noteRoutePressed_4B.png")).getImage();
+	private Image noteRoutePressedImage_5B = new ImageIcon(Main.class.getResource("../images/noteRoutePressed_5B.png")).getImage();
+	private Image noteRoutePressedImage_6B = new ImageIcon(Main.class.getResource("../images/noteRoutePressed_6B.png")).getImage();
+	private Image noteRoutePressedImage_7B = new ImageIcon(Main.class.getResource("../images/noteRoutePressed_7B.png")).getImage();
 
-		songName.setBounds(140, 310, 200, 200);
-		songName.setSize(400, 400);
-		artistName.setBounds(140, 310, 150, 150);
-		artistName.setSize(400, 400);
-		
-		add(songName);
-		add(artistName);
-		
-		add(menuBar);
-		
-		Music introMusic = new Music("sangil_song.mp3", true);
-		introMusic.start();
+	private Image noteRouteZImage = noteRouteImage_4B;
+	private Image noteRouteXImage = noteRouteImage_4B;
+	private Image noteRouteCImage = noteRouteImage_4B;
+	private Image noteRouteSpaceImage = noteRouteImage_4B;
+	private Image noteRouteCommaImage = noteRouteImage_4B;
+	private Image noteRoutePeriodImage = noteRouteImage_4B;
+	private Image noteRouteSlashImage = noteRouteImage_4B;
+	
+	private int keyNumber = 4; // 몇키인지 확인
+	
+	private String titleName;
+	private String difficulty;
+	private String musicTitle;
+	private Music gameMusic;
+	
+	ArrayList<Note> noteList = new ArrayList<Note>();
+	
+	public Game(String titleName, String difficulty, String musicTitle) {
+		this.titleName = titleName;
+		this.difficulty = difficulty;
+		this.musicTitle = musicTitle;
+		gameMusic = new Music(this.musicTitle, false);
+		gameMusic.start();
+		dropNotes(titleName);
 	}
 	
-	// 함수 오버라이딩으로 화면을 그린다.
-	public void paint(Graphics g) {
-		// 더블 버퍼링(깜빡임 방지)
-		screenImage = createImage(Main.SCREEN_WIDTH, Main.SCREEN_HEIGHT);
-		screenGraphic = screenImage.getGraphics();
-		screenDraw(screenGraphic);
-		g.drawImage(screenImage, 0, 0, null);
-	}
+	public void screenDraw(Graphics2D g) {
+		switch (keyNumber) {
+		case 4:
+			
+			g.drawImage(noteRouteXImage, 250, 30, null); // 1
+			g.drawImage(noteRouteCImage, 454, 30, null); // 2
+			g.drawImage(noteRouteCommaImage, 658, 30, null); // 3
+			g.drawImage(noteRoutePeriodImage, 862, 30, null); // 4
 
-	private void screenDraw(Graphics g) {
-		g.drawImage(background, 0, 0, null); // 자주 바뀔 수 있는 이미지를 그리기 (0,0부터)
-		if (isMainScreen) {
-			g.drawImage(selectedImage, 340, 100, null);
+			g.drawImage(noteRouteLineImage, 246, 30, null);
+			g.drawImage(noteRouteLineImage, 450, 30, null);
+			g.drawImage(noteRouteLineImage, 654, 30, null);
+			g.drawImage(noteRouteLineImage, 858, 30, null);
+			g.drawImage(noteRouteLineImage, 1062, 30, null);
+
+			break;
+			
+		case 5:
+			g.drawImage(noteRouteXImage, 250, 30, null); // 1
+			g.drawImage(noteRouteCImage, 411, 30, null); // 2
+			g.drawImage(noteRouteSpaceImage, 572, 30, null); // 3
+			g.drawImage(noteRouteCommaImage, 733, 30, null); // 4
+			g.drawImage(noteRoutePeriodImage, 894, 30, null); // 5
+
+			g.drawImage(noteRouteLineImage, 246, 30, null);
+			g.drawImage(noteRouteLineImage, 407, 30, null);
+			g.drawImage(noteRouteLineImage, 568, 30, null);
+			g.drawImage(noteRouteLineImage, 729, 30, null);
+			g.drawImage(noteRouteLineImage, 890, 30, null);
+			g.drawImage(noteRouteLineImage, 1051, 30, null);
+			
+			break;
+			
+		case 6:
+
+			g.drawImage(noteRouteZImage, 250, 30, null); // 1
+			g.drawImage(noteRouteXImage, 384, 30, null); // 2
+			g.drawImage(noteRouteCImage, 518, 30, null); // 3
+			g.drawImage(noteRouteCommaImage, 652, 30, null); // 4
+			g.drawImage(noteRoutePeriodImage, 786, 30, null); // 5
+			g.drawImage(noteRouteSlashImage, 920, 30, null); // 6
+
+			g.drawImage(noteRouteLineImage, 246, 30, null);
+			g.drawImage(noteRouteLineImage, 380, 30, null);
+			g.drawImage(noteRouteLineImage, 514, 30, null);
+			g.drawImage(noteRouteLineImage, 648, 30, null);
+			g.drawImage(noteRouteLineImage, 782, 30, null);
+			g.drawImage(noteRouteLineImage, 916, 30, null);
+			g.drawImage(noteRouteLineImage, 1050, 30, null);
+			
+			break;
+			
+		case 7:
+
+			g.drawImage(noteRouteZImage, 250, 30, null); // 1
+			g.drawImage(noteRouteXImage, 365, 30, null); // 2
+			g.drawImage(noteRouteCImage, 480, 30, null); // 3
+			g.drawImage(noteRouteSpaceImage, 595, 30, null); // 4
+			g.drawImage(noteRouteCommaImage, 710, 30, null); // 5
+			g.drawImage(noteRoutePeriodImage, 825, 30, null); // 6
+			g.drawImage(noteRouteSlashImage, 940, 30, null); // 7
+
+			g.drawImage(noteRouteLineImage, 246, 30, null);
+			g.drawImage(noteRouteLineImage, 361, 30, null);
+			g.drawImage(noteRouteLineImage, 476, 30, null);
+			g.drawImage(noteRouteLineImage, 591, 30, null);
+			g.drawImage(noteRouteLineImage, 706, 30, null);
+			g.drawImage(noteRouteLineImage, 821, 30, null);
+			g.drawImage(noteRouteLineImage, 936, 30, null);
+			g.drawImage(noteRouteLineImage, 1051, 30, null);
+			
+			break;
+		default:
+			break;
 		}
-		paintComponents(g); // 항상 고정되는 이미지를 그리기
-		this.repaint();
+		
+		g.drawImage(gameInfoImage, 0, 660, null);
+		g.drawImage(judgementLineImage, 0, 580, null);
+		
+		for (int i = 0; i < noteList.size(); i++) {
+			Note note = noteList.get(i);
+			note.screenDraw(g);
+		}
+		
+		g.setColor(Color.WHITE);
+		g.setFont(new Font("Arial", Font.BOLD, 30));
+		g.drawString(titleName, 15, 702);
+		g.drawString(difficulty, 1100, 702);
+		g.setFont(new Font("Elephant", Font.BOLD, 30));
+		g.drawString("000000", 565, 702);
+		
+		g.setRenderingHint(RenderingHints.KEY_TEXT_ANTIALIASING, RenderingHints.VALUE_TEXT_ANTIALIAS_ON);
+		g.setColor(Color.DARK_GRAY);
+		g.setFont(new Font("Arial", Font.PLAIN, 30));
+		
+		switch (keyNumber) {
+		case 4:
+			g.drawString("X", 350, 609);
+			g.drawString("C", 554, 609);
+			g.drawString(",", 758, 609);
+			g.drawString(".", 962, 609);
+			break;
+			
+		case 5:
+			g.drawString("X", 250 + 70, 609);
+			g.drawString("C", 411 + 70, 609);
+			g.drawString("SPACE", 572 + 30, 609);
+			g.drawString(",", 733 + 75, 609);
+			g.drawString(".", 894 + 75, 609);
+			break;
+			
+		case 6:
+			g.drawString("Z", 250 + 55, 609);
+			g.drawString("X", 384 + 55, 609);
+			g.drawString("C", 518 + 55, 609);
+			g.drawString(",", 652 + 55, 609);
+			g.drawString(".", 786 + 55, 609);
+			g.drawString("/", 920 + 55, 609);
+			break;
+			
+		case 7:
+			g.drawString("Z", 250 + 50, 609);
+			g.drawString("X", 365 + 50, 609);
+			g.drawString("C", 480 + 50, 609);
+			g.drawString("SPACE", 595 + 5, 609);
+			g.drawString(",", 710 + 50, 609);
+			g.drawString(".", 825 + 50, 609);
+			g.drawString("/", 940 + 50, 609);
+			break;
+
+		default:
+			break;
+		}
+		
+	}
+	
+	public void setKeyNumber(int keyNumber) {
+		this.keyNumber = keyNumber;
+		
+		switch (keyNumber) {
+		case 4:
+			noteRouteZImage = noteRouteImage_4B;
+			noteRouteXImage = noteRouteImage_4B;
+			noteRouteCImage = noteRouteImage_4B;
+			noteRouteSpaceImage = noteRouteImage_4B;
+			noteRouteCommaImage = noteRouteImage_4B;
+			noteRoutePeriodImage = noteRouteImage_4B;
+			noteRouteSlashImage = noteRouteImage_4B;
+			break;
+		case 5:
+			noteRouteZImage = noteRouteImage_5B;
+			noteRouteXImage = noteRouteImage_5B;
+			noteRouteCImage = noteRouteImage_5B;
+			noteRouteSpaceImage = noteRouteImage_5B;
+			noteRouteCommaImage = noteRouteImage_5B;
+			noteRoutePeriodImage = noteRouteImage_5B;
+			noteRouteSlashImage = noteRouteImage_5B;
+			break;
+		case 6:
+			noteRouteZImage = noteRouteImage_6B;
+			noteRouteXImage = noteRouteImage_6B;
+			noteRouteCImage = noteRouteImage_6B;
+			noteRouteSpaceImage = noteRouteImage_6B;
+			noteRouteCommaImage = noteRouteImage_6B;
+			noteRoutePeriodImage = noteRouteImage_6B;
+			noteRouteSlashImage = noteRouteImage_6B;
+			break;
+		case 7:
+			noteRouteZImage = noteRouteImage_7B;
+			noteRouteXImage = noteRouteImage_7B;
+			noteRouteCImage = noteRouteImage_7B;
+			noteRouteSpaceImage = noteRouteImage_7B;
+			noteRouteCommaImage = noteRouteImage_7B;
+			noteRoutePeriodImage = noteRouteImage_7B;
+			noteRouteSlashImage = noteRouteImage_7B;
+			break;
+
+		default:
+			break;
+		}
+	}
+	
+	public void pressZ() {
+		switch (keyNumber) {
+		case 4:
+			noteRouteZImage = noteRoutePressedImage_4B;
+			break;
+		case 5:
+			noteRouteZImage = noteRoutePressedImage_5B;
+			break;
+		case 6:
+			noteRouteZImage = noteRoutePressedImage_6B;
+			break;
+		case 7:
+			noteRouteZImage = noteRoutePressedImage_7B;
+			break;
+
+		default:
+			break;
+		}
+	}
+	
+	public void releaseZ() {
+		switch (keyNumber) {
+		case 4:
+			noteRouteZImage = noteRouteImage_4B;
+			break;
+		case 5:
+			noteRouteZImage = noteRouteImage_5B;
+			break;
+		case 6:
+			noteRouteZImage = noteRouteImage_6B;
+			break;
+		case 7:
+			noteRouteZImage = noteRouteImage_7B;
+			break;
+
+		default:
+			break;
+		}
+	}
+	
+	public void pressX() {
+		switch (keyNumber) {
+		case 4:
+			noteRouteXImage = noteRoutePressedImage_4B;
+			break;
+		case 5:
+			noteRouteXImage = noteRoutePressedImage_5B;
+			break;
+		case 6:
+			noteRouteXImage = noteRoutePressedImage_6B;
+			break;
+		case 7:
+			noteRouteXImage = noteRoutePressedImage_7B;
+			break;
+
+		default:
+			break;
+		}
+	}
+	
+	public void releaseX() {
+		switch (keyNumber) {
+		case 4:
+			noteRouteXImage = noteRouteImage_4B;
+			break;
+		case 5:
+			noteRouteXImage = noteRouteImage_5B;
+			break;
+		case 6:
+			noteRouteXImage = noteRouteImage_6B;
+			break;
+		case 7:
+			noteRouteXImage = noteRouteImage_7B;
+			break;
+
+		default:
+			break;
+		}
+	}
+	
+	public void pressC() {
+		switch (keyNumber) {
+		case 4:
+			noteRouteCImage = noteRoutePressedImage_4B;
+			break;
+		case 5:
+			noteRouteCImage = noteRoutePressedImage_5B;
+			break;
+		case 6:
+			noteRouteCImage = noteRoutePressedImage_6B;
+			break;
+		case 7:
+			noteRouteCImage = noteRoutePressedImage_7B;
+			break;
+
+		default:
+			break;
+		}
+	}
+	
+	public void releaseC() {
+		switch (keyNumber) {
+		case 4:
+			noteRouteCImage = noteRouteImage_4B;
+			break;
+		case 5:
+			noteRouteCImage = noteRouteImage_5B;
+			break;
+		case 6:
+			noteRouteCImage = noteRouteImage_6B;
+			break;
+		case 7:
+			noteRouteCImage = noteRouteImage_7B;
+			break;
+
+		default:
+			break;
+		}
+	}
+	
+	public void pressSpace() {
+		switch (keyNumber) {
+		case 4:
+			noteRouteSpaceImage = noteRoutePressedImage_4B;
+			break;
+		case 5:
+			noteRouteSpaceImage = noteRoutePressedImage_5B;
+			break;
+		case 6:
+			noteRouteSpaceImage = noteRoutePressedImage_6B;
+			break;
+		case 7:
+			noteRouteSpaceImage = noteRoutePressedImage_7B;
+			break;
+
+		default:
+			break;
+		}
+	}
+	
+	public void releaseSpace() {
+		switch (keyNumber) {
+		case 4:
+			noteRouteSpaceImage = noteRouteImage_4B;
+			break;
+		case 5:
+			noteRouteSpaceImage = noteRouteImage_5B;
+			break;
+		case 6:
+			noteRouteSpaceImage = noteRouteImage_6B;
+			break;
+		case 7:
+			noteRouteSpaceImage = noteRouteImage_7B;
+			break;
+
+		default:
+			break;
+		}
+	}
+	
+	public void pressComma() {
+		switch (keyNumber) {
+		case 4:
+			noteRouteCommaImage = noteRoutePressedImage_4B;
+			break;
+		case 5:
+			noteRouteCommaImage = noteRoutePressedImage_5B;
+			break;
+		case 6:
+			noteRouteCommaImage = noteRoutePressedImage_6B;
+			break;
+		case 7:
+			noteRouteCommaImage = noteRoutePressedImage_7B;
+			break;
+
+		default:
+			break;
+		}
+	}
+	
+	public void releaseComma() {
+		switch (keyNumber) {
+		case 4:
+			noteRouteCommaImage = noteRouteImage_4B;
+			break;
+		case 5:
+			noteRouteCommaImage = noteRouteImage_5B;
+			break;
+		case 6:
+			noteRouteCommaImage = noteRouteImage_6B;
+			break;
+		case 7:
+			noteRouteCommaImage = noteRouteImage_7B;
+			break;
+
+		default:
+			break;
+		}
+	}
+	
+	public void pressPeriod() {
+		switch (keyNumber) {
+		case 4:
+			noteRoutePeriodImage = noteRoutePressedImage_4B;
+			break;
+		case 5:
+			noteRoutePeriodImage = noteRoutePressedImage_5B;
+			break;
+		case 6:
+			noteRoutePeriodImage = noteRoutePressedImage_6B;
+			break;
+		case 7:
+			noteRoutePeriodImage = noteRoutePressedImage_7B;
+			break;
+
+		default:
+			break;
+		}
+	}
+	
+	public void releasePeriod() {
+		switch (keyNumber) {
+		case 4:
+			noteRoutePeriodImage = noteRouteImage_4B;
+			break;
+		case 5:
+			noteRoutePeriodImage = noteRouteImage_5B;
+			break;
+		case 6:
+			noteRoutePeriodImage = noteRouteImage_6B;
+			break;
+		case 7:
+			noteRoutePeriodImage = noteRouteImage_7B;
+			break;
+
+		default:
+			break;
+		}
+	}
+	
+	public void pressSlash() {
+		switch (keyNumber) {
+		case 4:
+			noteRouteSlashImage = noteRoutePressedImage_4B;
+			break;
+		case 5:
+			noteRouteSlashImage = noteRoutePressedImage_5B;
+			break;
+		case 6:
+			noteRouteSlashImage = noteRoutePressedImage_6B;
+			break;
+		case 7:
+			noteRouteSlashImage = noteRoutePressedImage_7B;
+			break;
+
+		default:
+			break;
+		}
+	}
+	
+	public void releaseSlash() {
+		switch (keyNumber) {
+		case 4:
+			noteRouteSlashImage = noteRouteImage_4B;
+			break;
+		case 5:
+			noteRouteSlashImage = noteRouteImage_5B;
+			break;
+		case 6:
+			noteRouteSlashImage = noteRouteImage_6B;
+			break;
+		case 7:
+			noteRouteSlashImage = noteRouteImage_7B;
+			break;
+
+		default:
+			break;
+		}
+	}
+	
+	@Override
+	public void run() {
+		
+	}
+	
+	public void close() {
+		gameMusic.close();
+		this.interrupt();
+	}
+	
+	public void dropNotes(String titleName) {
+		
+		Note note = new Note(250, 4);
+		note.start();
+		noteList.add(note);
 	}
 }
