@@ -760,7 +760,7 @@ public class Game extends Thread {
 						new Beat(startTime + gap * 104, ",", 4), 
 						new Beat(startTime + gap * 106, ",", 4),
 						new Beat(startTime + gap * 108, ".", 4), 
-						new Beat(startTime + gap * 110, ".", 4) 
+						new Beat(startTime + gap * 110, ".", 4),
 						};
 			} else if (difficulty.equals("Hard")) {
 				beats = new Beat[] { 
