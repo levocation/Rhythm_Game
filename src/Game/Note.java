@@ -21,6 +21,10 @@ public class Note extends Thread {
 	private int noteType; // keyNumber
 	public boolean proceeded = true;
 	
+	public int getY() {
+		return y;
+	}
+	
 	public boolean isProceeded() {
 		return proceeded;
 	}
@@ -131,50 +135,57 @@ public class Note extends Thread {
 		}
 	}
 
-	public int judge() {
+	public String judge() {
 		if (getKey.equals("Plus")) {
 			if (y >= 573) {
 				System.out.println("Plus");
 				close();
-				return 1;
+				return "Plus";
 			}
-			return 0;
 		}
 		else if (getKey.equals("Minus")) {
 			if (y >= 573) {
 				System.out.println("Minus");
 				close();
-				return -1;
+				return "Minus";
 			}
-			return 0;
 		}
 		else {
 			if (y >= 613) {
 				System.out.println("Late");
 				close();
+				return "Late";
 			} else if (y >= 600) {
 				System.out.println("Good");
 				close();
+				return "Good";
 			} else if (y >= 587) {
 				System.out.println("Cool");
 				close();
+				return "Cool";
 			} else if (y >= 573) {
-				System.out.println("Prefect");
+				System.out.println("Perfect");
 				close();
+				return "Perfect";
 			} else if (y >= 565) {
 				System.out.println("Cool");
 				close();
+				return "Cool";
 			} else if (y >= 550) {
 				System.out.println("Good");
 				close();
+				return "Good";
 			} else if (y >= 535) {
 				System.out.println("Early");
 				close();
+				return "Early";
 			} else if (y >= 475) {
 				System.out.println("Miss");
 				close();
+				return "Miss";
 			}
-			return 0;
+			return "None";
 		}
+		return "None";
 	}
 }
