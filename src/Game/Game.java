@@ -10,26 +10,36 @@ import java.util.ArrayList;
 import javax.swing.ImageIcon;
 
 public class Game extends Thread {
-	
+
 	private Image gameInfoImage = new ImageIcon(Main.class.getResource("../images/gameInfo.png")).getImage();
 	private Image judgementLineImage = new ImageIcon(Main.class.getResource("../images/judgementLine.png")).getImage();
-	
+
 	private Image noteRouteImage_4B = new ImageIcon(Main.class.getResource("../images/noteRoute_4B.png")).getImage();
 	private Image noteRouteImage_5B = new ImageIcon(Main.class.getResource("../images/noteRoute_5B.png")).getImage();
 	private Image noteRouteImage_6B = new ImageIcon(Main.class.getResource("../images/noteRoute_6B.png")).getImage();
 	private Image noteRouteImage_7B = new ImageIcon(Main.class.getResource("../images/noteRoute_7B.png")).getImage();
-	
+
 	private Image noteRouteLineImage = new ImageIcon(Main.class.getResource("../images/noteRouteLine.png")).getImage();
 	
-	//private Image noteBasicImage_4B = new ImageIcon(Main.class.getResource("../images/noteBasic_4B.png")).getImage();
-	//private Image noteBasicImage_5B = new ImageIcon(Main.class.getResource("../images/noteBasic_5B.png")).getImage();
-	//private Image noteBasicImage_6B = new ImageIcon(Main.class.getResource("../images/noteBasic_6B.png")).getImage();
-	//private Image noteBasicImage_7B = new ImageIcon(Main.class.getResource("../images/noteBasic_7B.png")).getImage();
+	private Image blueFlareImage = new ImageIcon(Main.class.getResource("../images/blueFlare.png")).getImage();
 
-	private Image noteRoutePressedImage_4B = new ImageIcon(Main.class.getResource("../images/noteRoutePressed_4B.png")).getImage();
-	private Image noteRoutePressedImage_5B = new ImageIcon(Main.class.getResource("../images/noteRoutePressed_5B.png")).getImage();
-	private Image noteRoutePressedImage_6B = new ImageIcon(Main.class.getResource("../images/noteRoutePressed_6B.png")).getImage();
-	private Image noteRoutePressedImage_7B = new ImageIcon(Main.class.getResource("../images/noteRoutePressed_7B.png")).getImage();
+	// private Image noteBasicImage_4B = new
+	// ImageIcon(Main.class.getResource("../images/noteBasic_4B.png")).getImage();
+	// private Image noteBasicImage_5B = new
+	// ImageIcon(Main.class.getResource("../images/noteBasic_5B.png")).getImage();
+	// private Image noteBasicImage_6B = new
+	// ImageIcon(Main.class.getResource("../images/noteBasic_6B.png")).getImage();
+	// private Image noteBasicImage_7B = new
+	// ImageIcon(Main.class.getResource("../images/noteBasic_7B.png")).getImage();
+
+	private Image noteRoutePressedImage_4B = new ImageIcon(Main.class.getResource("../images/noteRoutePressed_4B.png"))
+			.getImage();
+	private Image noteRoutePressedImage_5B = new ImageIcon(Main.class.getResource("../images/noteRoutePressed_5B.png"))
+			.getImage();
+	private Image noteRoutePressedImage_6B = new ImageIcon(Main.class.getResource("../images/noteRoutePressed_6B.png"))
+			.getImage();
+	private Image noteRoutePressedImage_7B = new ImageIcon(Main.class.getResource("../images/noteRoutePressed_7B.png"))
+			.getImage();
 
 	private Image noteRouteZImage = noteRouteImage_4B;
 	private Image noteRouteXImage = noteRouteImage_4B;
@@ -38,29 +48,28 @@ public class Game extends Thread {
 	private Image noteRouteCommaImage = noteRouteImage_4B;
 	private Image noteRoutePeriodImage = noteRouteImage_4B;
 	private Image noteRouteSlashImage = noteRouteImage_4B;
-	
+
 	private int keyNumber = 4; // 몇키인지 확인
-	
+
 	private String titleName;
 	private String difficulty;
 	private String musicTitle;
 	private Music gameMusic;
-	
+
 	ArrayList<Note> noteList = new ArrayList<Note>();
-	
+
 	public Game(String titleName, String difficulty, String musicTitle) {
 		this.titleName = titleName;
 		this.difficulty = difficulty;
 		this.musicTitle = musicTitle;
 		gameMusic = new Music(this.musicTitle, false);
-		gameMusic.start();
-		dropNotes(titleName);
+
 	}
-	
+
 	public void screenDraw(Graphics2D g) {
 		switch (keyNumber) {
 		case 4:
-			
+
 			g.drawImage(noteRouteXImage, 250, 30, null); // 1
 			g.drawImage(noteRouteCImage, 454, 30, null); // 2
 			g.drawImage(noteRouteCommaImage, 658, 30, null); // 3
@@ -73,7 +82,7 @@ public class Game extends Thread {
 			g.drawImage(noteRouteLineImage, 1062, 30, null);
 
 			break;
-			
+
 		case 5:
 			g.drawImage(noteRouteXImage, 250, 30, null); // 1
 			g.drawImage(noteRouteCImage, 411, 30, null); // 2
@@ -87,9 +96,9 @@ public class Game extends Thread {
 			g.drawImage(noteRouteLineImage, 729, 30, null);
 			g.drawImage(noteRouteLineImage, 890, 30, null);
 			g.drawImage(noteRouteLineImage, 1051, 30, null);
-			
+
 			break;
-			
+
 		case 6:
 
 			g.drawImage(noteRouteZImage, 250, 30, null); // 1
@@ -106,9 +115,9 @@ public class Game extends Thread {
 			g.drawImage(noteRouteLineImage, 782, 30, null);
 			g.drawImage(noteRouteLineImage, 916, 30, null);
 			g.drawImage(noteRouteLineImage, 1050, 30, null);
-			
+
 			break;
-			
+
 		case 7:
 
 			g.drawImage(noteRouteZImage, 250, 30, null); // 1
@@ -127,31 +136,37 @@ public class Game extends Thread {
 			g.drawImage(noteRouteLineImage, 821, 30, null);
 			g.drawImage(noteRouteLineImage, 936, 30, null);
 			g.drawImage(noteRouteLineImage, 1051, 30, null);
-			
+
 			break;
 		default:
 			break;
 		}
-		
+
 		g.drawImage(gameInfoImage, 0, 660, null);
 		g.drawImage(judgementLineImage, 0, 580, null);
-		
+
 		for (int i = 0; i < noteList.size(); i++) {
 			Note note = noteList.get(i);
-			note.screenDraw(g);
+			if (!note.proceeded) {
+				noteList.remove(i);
+				i--;
+			} else {
+				note.screenDraw(g);
+			}
+			
 		}
-		
+
 		g.setColor(Color.WHITE);
 		g.setFont(new Font("Arial", Font.BOLD, 30));
 		g.drawString(titleName, 15, 702);
 		g.drawString(difficulty, 1100, 702);
 		g.setFont(new Font("Elephant", Font.BOLD, 30));
 		g.drawString("000000", 565, 702);
-		
-		g.setRenderingHint(RenderingHints.KEY_TEXT_ANTIALIASING, RenderingHints.VALUE_TEXT_ANTIALIAS_ON);
+
 		g.setColor(Color.DARK_GRAY);
 		g.setFont(new Font("Arial", Font.PLAIN, 30));
-		
+		g.setRenderingHint(RenderingHints.KEY_TEXT_ANTIALIASING, RenderingHints.VALUE_TEXT_ANTIALIAS_ON);
+
 		switch (keyNumber) {
 		case 4:
 			g.drawString("X", 350, 609);
@@ -159,7 +174,7 @@ public class Game extends Thread {
 			g.drawString(",", 758, 609);
 			g.drawString(".", 962, 609);
 			break;
-			
+
 		case 5:
 			g.drawString("X", 250 + 70, 609);
 			g.drawString("C", 411 + 70, 609);
@@ -167,7 +182,7 @@ public class Game extends Thread {
 			g.drawString(",", 733 + 75, 609);
 			g.drawString(".", 894 + 75, 609);
 			break;
-			
+
 		case 6:
 			g.drawString("Z", 250 + 55, 609);
 			g.drawString("X", 384 + 55, 609);
@@ -176,7 +191,7 @@ public class Game extends Thread {
 			g.drawString(".", 786 + 55, 609);
 			g.drawString("/", 920 + 55, 609);
 			break;
-			
+
 		case 7:
 			g.drawString("Z", 250 + 50, 609);
 			g.drawString("X", 365 + 50, 609);
@@ -190,12 +205,12 @@ public class Game extends Thread {
 		default:
 			break;
 		}
-		
+
 	}
-	
+
 	public void setKeyNumber(int keyNumber) {
 		this.keyNumber = keyNumber;
-		
+
 		switch (keyNumber) {
 		case 4:
 			noteRouteZImage = noteRouteImage_4B;
@@ -238,8 +253,9 @@ public class Game extends Thread {
 			break;
 		}
 	}
-	
+
 	public void pressZ() {
+		judge("Z");
 		switch (keyNumber) {
 		case 4:
 			noteRouteZImage = noteRoutePressedImage_4B;
@@ -258,7 +274,7 @@ public class Game extends Thread {
 			break;
 		}
 	}
-	
+
 	public void releaseZ() {
 		switch (keyNumber) {
 		case 4:
@@ -278,8 +294,9 @@ public class Game extends Thread {
 			break;
 		}
 	}
-	
+
 	public void pressX() {
+		judge("X");
 		switch (keyNumber) {
 		case 4:
 			noteRouteXImage = noteRoutePressedImage_4B;
@@ -298,7 +315,7 @@ public class Game extends Thread {
 			break;
 		}
 	}
-	
+
 	public void releaseX() {
 		switch (keyNumber) {
 		case 4:
@@ -318,8 +335,9 @@ public class Game extends Thread {
 			break;
 		}
 	}
-	
+
 	public void pressC() {
+		judge("C");
 		switch (keyNumber) {
 		case 4:
 			noteRouteCImage = noteRoutePressedImage_4B;
@@ -338,7 +356,7 @@ public class Game extends Thread {
 			break;
 		}
 	}
-	
+
 	public void releaseC() {
 		switch (keyNumber) {
 		case 4:
@@ -358,8 +376,9 @@ public class Game extends Thread {
 			break;
 		}
 	}
-	
+
 	public void pressSpace() {
+		judge("SPACE");
 		switch (keyNumber) {
 		case 4:
 			noteRouteSpaceImage = noteRoutePressedImage_4B;
@@ -378,7 +397,7 @@ public class Game extends Thread {
 			break;
 		}
 	}
-	
+
 	public void releaseSpace() {
 		switch (keyNumber) {
 		case 4:
@@ -398,8 +417,9 @@ public class Game extends Thread {
 			break;
 		}
 	}
-	
+
 	public void pressComma() {
+		judge(",");
 		switch (keyNumber) {
 		case 4:
 			noteRouteCommaImage = noteRoutePressedImage_4B;
@@ -418,7 +438,7 @@ public class Game extends Thread {
 			break;
 		}
 	}
-	
+
 	public void releaseComma() {
 		switch (keyNumber) {
 		case 4:
@@ -438,8 +458,9 @@ public class Game extends Thread {
 			break;
 		}
 	}
-	
+
 	public void pressPeriod() {
+		judge(".");
 		switch (keyNumber) {
 		case 4:
 			noteRoutePeriodImage = noteRoutePressedImage_4B;
@@ -458,7 +479,7 @@ public class Game extends Thread {
 			break;
 		}
 	}
-	
+
 	public void releasePeriod() {
 		switch (keyNumber) {
 		case 4:
@@ -478,8 +499,9 @@ public class Game extends Thread {
 			break;
 		}
 	}
-	
+
 	public void pressSlash() {
+		judge("/");
 		switch (keyNumber) {
 		case 4:
 			noteRouteSlashImage = noteRoutePressedImage_4B;
@@ -498,7 +520,7 @@ public class Game extends Thread {
 			break;
 		}
 	}
-	
+
 	public void releaseSlash() {
 		switch (keyNumber) {
 		case 4:
@@ -518,21 +540,217 @@ public class Game extends Thread {
 			break;
 		}
 	}
-	
+
 	@Override
 	public void run() {
-		
+		dropNotes(titleName);
 	}
-	
+
 	public void close() {
 		gameMusic.close();
 		this.interrupt();
 	}
-	
+
 	public void dropNotes(String titleName) {
+
+		Beat[] beats = null;
+
+		if (titleName.equals("School Song (SangilMedia ver.)")) {
+
+			int startTime = 1000 - (Main.REACH_TIME * 1000);
+
+			if (difficulty.equals("Easy")) {
+				int gap = 125;
+				beats = new Beat[] { new Beat(startTime, "C", 4) };
+			} else if (difficulty.equals("Normal")) {
+				int gap = 125;
+				beats = new Beat[] { new Beat(startTime, "C", 4) };
+			} else if (difficulty.equals("Hard")) {
+				int gap = 125;
+				beats = new Beat[] { new Beat(startTime, "C", 4) };
+			} else if (difficulty.equals("Crazy")) {
+				int gap = 125;
+				beats = new Beat[] { new Beat(startTime, "C", 4) };
+			}
+		} else if (titleName.equals("Light It Up")) {
+
+			int startTime = 7250 - (Main.REACH_TIME * 1000);
+
+			if (difficulty.equals("Easy")) {
+				int gap = 125;
+				beats = new Beat[] { new Beat(startTime, "C", 4) };
+			} else if (difficulty.equals("Normal")) {
+				int gap = 125;
+				beats = new Beat[] { new Beat(startTime, "C", 4) };
+			} else if (difficulty.equals("Hard")) {
+				int gap = 125;
+				beats = new Beat[] { new Beat(startTime, "C", 4) };
+			} else if (difficulty.equals("Crazy")) {
+				int gap = 125;
+				beats = new Beat[] { new Beat(startTime, "C", 4) };
+			}
+		} else if (titleName.equals("Invincible")) {
+			
+			int startTime = 1000 - (Main.REACH_TIME * 1000);
+
+			if (difficulty.equals("Easy")) {
+				int gap = 125;
+				beats = new Beat[] { new Beat(startTime, "C", 4) };
+			} else if (difficulty.equals("Normal")) {
+				int gap = 125;
+				beats = new Beat[] { new Beat(startTime, "C", 4) };
+			} else if (difficulty.equals("Hard")) {
+				int gap = 125;
+				beats = new Beat[] { new Beat(startTime, "C", 4) };
+			} else if (difficulty.equals("Crazy")) {
+				int gap = 125;
+				beats = new Beat[] { new Beat(startTime, "C", 4) };
+			}
+		} else if (titleName.equals("ouroboros -twin stroke of the end-")) {
+			
+			int startTime = 1000 - (Main.REACH_TIME * 1000);
+			
+			if (difficulty.equals("Easy")) {
+				int gap = 125;
+				beats = new Beat[] { new Beat(startTime, "C", 4) };
+			} else if (difficulty.equals("Normal")) {
+				int gap = 125;
+				beats = new Beat[] { new Beat(startTime, "C", 4) };
+			} else if (difficulty.equals("Hard")) {
+				int gap = 125;
+				beats = new Beat[] { new Beat(startTime, "C", 4) };
+			} else if (difficulty.equals("Crazy")) {
+				int gap = 125;
+				beats = new Beat[] { new Beat(startTime, "C", 4) };
+			}
+			
+		} else if (titleName.equals("Toxic Vibration")) {
+			
+			int startTime = 3500 - (Main.REACH_TIME * 1000);
+			int gap = 76;
+			
+			if (difficulty.equals("Easy")) {
+				beats = new Beat[] {
+						new Beat(startTime + gap * 0, "X", 4),
+						new Beat(startTime + gap * 16, "C", 4),
+						new Beat(startTime + gap * 32, ",", 4),
+						new Beat(startTime + gap * 48, ".", 4),
+						new Beat(startTime + gap * 64, "X", 4),
+						new Beat(startTime + gap * 72, "C", 4),
+						new Beat(startTime + gap * 80, ",", 4),
+						new Beat(startTime + gap * 88, ".", 4),
+						new Beat(startTime + gap * 96, "X", 4),
+						new Beat(startTime + gap * 104, "C", 4),
+						new Beat(startTime + gap * 104, ",", 4),
+						new Beat(startTime + gap * 112, "C", 4),
+						new Beat(startTime + gap * 112, ".", 4),
+						new Beat(startTime + gap * 116, "X", 4),
+						new Beat(startTime + gap * 120, "C", 4),
+						new Beat(startTime + gap * 120, ",", 4),
+						new Beat(startTime + gap * 124, "Plus", 4),
+						new Beat(startTime + gap * 128, "X", 5),
+						new Beat(startTime + gap * 136, "C", 5),
+						new Beat(startTime + gap * 144, "SPACE", 5),
+						new Beat(startTime + gap * 152, ",", 5)
+						};
+			} else if (difficulty.equals("Normal")) {
+				beats = new Beat[] {
+						new Beat(startTime + gap * 0, "X", 4),
+						new Beat(startTime + gap * 0, "C", 4),
+						new Beat(startTime + gap * 16, "C", 4),
+						new Beat(startTime + gap * 16, ",", 4),
+						new Beat(startTime + gap * 32, ",", 4),
+						new Beat(startTime + gap * 32, ".", 4),
+						new Beat(startTime + gap * 48, "X", 4),
+						new Beat(startTime + gap * 48, ",", 4),
+						new Beat(startTime + gap * 64, "X", 4),
+						new Beat(startTime + gap * 68, "C", 4),
+						new Beat(startTime + gap * 72, ",", 4),
+						new Beat(startTime + gap * 76, ".", 4),
+						new Beat(startTime + gap * 80, "X", 4),
+						new Beat(startTime + gap * 84, "C", 4),
+						new Beat(startTime + gap * 88, ",", 4),
+						new Beat(startTime + gap * 92, ".", 4),
+						new Beat(startTime + gap * 96, "X", 4),
+						new Beat(startTime + gap * 98, "X", 4),
+						new Beat(startTime + gap * 100, "C", 4),
+						new Beat(startTime + gap * 102, "C", 4),
+						new Beat(startTime + gap * 104, ",", 4),
+						new Beat(startTime + gap * 106, ",", 4),
+						new Beat(startTime + gap * 108, ".", 4),
+						new Beat(startTime + gap * 110, ".", 4)
+						};
+			} else if (difficulty.equals("Hard")) {
+				beats = new Beat[] {
+						new Beat(startTime + gap * 0, "X", 4), 
+						new Beat(startTime + gap * 4, "C", 4), 
+						new Beat(startTime + gap * 8, ",", 4), 
+						new Beat(startTime + gap * 12, ".", 4) 
+						};
+			} else if (difficulty.equals("Crazy")) {
+				beats = new Beat[] {
+						new Beat(startTime + gap * 0, "C", 4),
+						new Beat(startTime + gap * 4, "C", 4),
+						new Beat(startTime + gap * 8, "C", 4),
+						new Beat(startTime + gap * 12, "C", 4)
+						};
+			}
+			
+		}
+		int i = 0;
+
+		gameMusic.start();
 		
-		Note note = new Note(250, 4);
-		note.start();
-		noteList.add(note);
+		new Thread( ()-> {
+			while (true) {
+				judge("Plus");
+				judge("Minus");
+				try {
+					Thread.sleep(20);
+				} catch (Exception e) {
+					// TODO: handle exception
+				}
+			}
+			
+		} ).start();
+		
+		while (i < beats.length && !isInterrupted()) {
+			boolean dropped = false;
+
+			if (beats[i].getTime() <= gameMusic.getTime()) {
+				Note note = new Note(beats[i].getNoteName(), beats[i].getKeyNumber());
+				note.start();
+				noteList.add(note);
+				i++;
+				dropped = true;
+			}
+
+			if (!dropped) {
+				try {
+					Thread.sleep(5);
+				} catch (Exception e) {
+					e.printStackTrace();
+				}
+			}
+		}
+		
+	}
+	
+	public void judge(String input) {
+		for (int i = 0; i < noteList.size(); i++) {
+			Note note = noteList.get(i);
+			if (input.equals(note.getKey())) {
+				int value = note.judge();
+				if (value == -1) {
+					keyNumber--;
+					setKeyNumber(keyNumber);
+				}
+				else if (value == 1) {
+					keyNumber++;
+					setKeyNumber(keyNumber);
+				}
+				break;
+			}
+		}
 	}
 }

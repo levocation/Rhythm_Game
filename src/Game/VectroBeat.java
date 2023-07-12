@@ -61,6 +61,18 @@ public class VectroBeat extends JFrame {
 	public static Game game;
 	
 	public VectroBeat() {
+		
+		trackList.add(new Track("sangil_title.png", "sangil_start.jpg", "sangil_game.jpg", 
+				"sangil_song cut.mp3", "sangil_song.mp3", "School Song (SangilMedia ver.)"));
+		trackList.add(new Track("Light It Up_title.png", "Light It Up_start.jpg", "Light It Up_game.jpg", 
+				"Light It Up cut.mp3", "Robin Hustin x TobiMorrow - Light It Up.mp3", "Light It Up"));
+		trackList.add(new Track("Invincible_title.png", "Invincible_start.jpg", "Invincible_game.jpg", 
+				"Invincible cut.mp3", "DEAF KEV - Invincible.mp3", "Invincible"));
+		trackList.add(new Track("ouroboros_title.png", "ouroboros_start.png", "ouroboros_game.jpg", 
+				"ouroboros cut.mp3", "Cranky VS MASAKI - ouroboros twin stroke of the end.mp3", "ouroboros -twin stroke of the end-"));
+		trackList.add(new Track("Toxic vibration_title.png", "Toxic vibration_start.png", "Toxic vibration_game.jpg", 
+				"Toxic vibration cut.mp3", "BEMANI - TOXIC VIBRATION.mp3", "Toxic Vibration"));
+		
 		setUndecorated(true); // 메뉴바가 안보이게 됨
 		setTitle("VectroBeat");
 		setSize(Main.SCREEN_WIDTH, Main.SCREEN_HEIGHT);
@@ -74,17 +86,6 @@ public class VectroBeat extends JFrame {
 		addKeyListener(new KeyListener());
 		
 		introMusic.start();
-
-		trackList.add(new Track("sangil_title.png", "sangil_start.jpg", "sangil_game.jpg", 
-				"sangil_song cut.mp3", "sangil_song.mp3", "School Song (SangilMedia ver.)"));
-		trackList.add(new Track("Light It Up_title.png", "Light It Up_start.jpg", "Light It Up_game.jpg", 
-				"Light It Up cut.mp3", "Robin Hustin x TobiMorrow - Light It Up.mp3", "Light It Up"));
-		trackList.add(new Track("Invincible_title.png", "Invincible_start.jpg", "Invincible_game.jpg", 
-				"Invincible cut.mp3", "DEAF KEV - Invincible.mp3", "Invincible"));
-		trackList.add(new Track("ouroboros_title.png", "ouroboros_start.png", "ouroboros_game.jpg", 
-				"ouroboros cut.mp3", "Cranky VS MASAKI - ouroboros twin stroke of the end.mp3", "ouroboros -twin stroke of the end-"));
-		trackList.add(new Track("Toxic vibration_title.png", "Toxic vibration_start.png", "Toxic vibration_game.jpg", 
-				"Toxic vibration cut.mp3", "BEMANI - TOXIC VIBRATION.mp3", "Toxic Vibration"));
 		
 		// exitButton
 		exitButton.setBounds(1245, 0, 30, 30);
@@ -336,6 +337,11 @@ public class VectroBeat extends JFrame {
 			game.screenDraw(g);
 		}
 		paintComponents(g); // 항상 고정되는 이미지를 그리기
+		try {
+			Thread.sleep(5);
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
 		this.repaint();
 	}
 	
@@ -388,9 +394,11 @@ public class VectroBeat extends JFrame {
 		backButton.setVisible(true);
 		
 		isGameScreen = true;
-		setFocusable(true);
 		game = new Game(trackList.get(nowSelected).getTitleName(), difficulty, trackList.get(nowSelected).getGameMusic());
 		game.setKeyNumber(4);
+		
+		game.start(); // run 함수 실행
+		setFocusable(true);
 	}
 	
 	public void backMain() {
