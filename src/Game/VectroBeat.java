@@ -50,7 +50,7 @@ public class VectroBeat extends JFrame {
 	private boolean isMainScreen = false;
 	private boolean isGameScreen = false;
 	
-	ArrayList<Track> trackList = new ArrayList<Track>();
+	public static ArrayList<Track> trackList = new ArrayList<Track>();
 
 	private Image titleImage;
 	private Image selectedImage;
@@ -226,7 +226,7 @@ public class VectroBeat extends JFrame {
 				gameStart(nowSelected, "Crazy");
 			}
 		});
-		add(backButton);
+		add(crazyButton);
 		
 		menuBar.setBounds(0, 0, 1280, 30);
 		menuBar.addMouseListener(new MouseAdapter() {
@@ -254,7 +254,7 @@ public class VectroBeat extends JFrame {
 				backMain();
 			}
 		});
-		add(crazyButton);
+		add(backButton);
 		
 		menuBar.setBounds(0, 0, 1280, 30);
 		menuBar.addMouseListener(new MouseAdapter() {
@@ -394,7 +394,7 @@ public class VectroBeat extends JFrame {
 		backButton.setVisible(true);
 		
 		isGameScreen = true;
-		game = new Game(trackList.get(nowSelected).getTitleName(), difficulty, trackList.get(nowSelected).getGameMusic());
+		game = new Game(trackList.get(nowSelected).getTitleName(), difficulty, trackList.get(nowSelected).getGameMusic(), nowSelected);
 		game.setKeyNumber(4);
 		
 		game.start(); // run 함수 실행

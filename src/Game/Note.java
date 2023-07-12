@@ -109,13 +109,14 @@ public class Note extends Thread {
 		}
 	}
 	
-	public void drop() {
+	public boolean drop() {
 		y += Main.NOTE_SPEED;
 		
-		if (( (!getKey.equals("Plus")) && (!getKey.equals("Minus")) ) && y > 640) {
-			System.out.println("Miss");
+		if (( (!getKey.equals("Plus")) && (!getKey.equals("Minus")) ) && y > 680) {
 			close();
+			return true;
 		}
+		else return false;
 	}
 	
 	@Override
@@ -151,40 +152,42 @@ public class Note extends Thread {
 			}
 		}
 		else {
-			if (y >= 613) {
-				System.out.println("Late");
-				close();
-				return "Late";
-			} else if (y >= 600) {
-				System.out.println("Good");
-				close();
-				return "Good";
-			} else if (y >= 587) {
-				System.out.println("Cool");
-				close();
-				return "Cool";
-			} else if (y >= 573) {
-				System.out.println("Perfect");
-				close();
-				return "Perfect";
-			} else if (y >= 565) {
-				System.out.println("Cool");
-				close();
-				return "Cool";
-			} else if (y >= 550) {
-				System.out.println("Good");
-				close();
-				return "Good";
-			} else if (y >= 535) {
-				System.out.println("Early");
-				close();
-				return "Early";
-			} else if (y >= 475) {
-				System.out.println("Miss");
-				close();
-				return "Miss";
+			if (y <= 680) {
+				if (y >= 660) {
+					System.out.println("Late");
+					close();
+					return "Late";
+				} else if (y >= 640) {
+					System.out.println("Good");
+					close();
+					return "Good";
+				} else if (y >= 620) {
+					System.out.println("Cool");
+					close();
+					return "Cool";
+				} else if (y >= 560) {
+					System.out.println("Perfect");
+					close();
+					return "Perfect";
+				} else if (y >= 500) {
+					System.out.println("Cool");
+					close();
+					return "Cool";
+				} else if (y >= 460) {
+					System.out.println("Good");
+					close();
+					return "Good";
+				} else if (y >= 420) {
+					System.out.println("Early");
+					close();
+					return "Early";
+				} else if (y >= 400) {
+					System.out.println("Miss");
+					close();
+					return "Miss";
+				}
+				return "None";
 			}
-			return "None";
 		}
 		return "None";
 	}

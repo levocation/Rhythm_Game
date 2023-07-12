@@ -5,6 +5,8 @@ import java.awt.Font;
 import java.awt.Graphics2D;
 import java.awt.Image;
 import java.awt.RenderingHints;
+import java.math.BigDecimal;
+import java.text.DecimalFormat;
 import java.util.ArrayList;
 
 import javax.swing.ImageIcon;
@@ -20,10 +22,8 @@ public class Game extends Thread {
 	private Image noteRouteImage_7B = new ImageIcon(Main.class.getResource("../images/noteRoute_7B.png")).getImage();
 
 	private Image noteRouteLineImage = new ImageIcon(Main.class.getResource("../images/noteRouteLine.png")).getImage();
-	
-	private Image blueFlareImage = new ImageIcon(Main.class.getResource("../images/blueFlare.png")).getImage();
 	private Image judgeImage;
-	
+
 	private Image noteRoutePressedImage_4B = new ImageIcon(Main.class.getResource("../images/noteRoutePressed_4B.png"))
 			.getImage();
 	private Image noteRoutePressedImage_5B = new ImageIcon(Main.class.getResource("../images/noteRoutePressed_5B.png"))
@@ -32,6 +32,10 @@ public class Game extends Thread {
 			.getImage();
 	private Image noteRoutePressedImage_7B = new ImageIcon(Main.class.getResource("../images/noteRoutePressed_7B.png"))
 			.getImage();
+
+	private Image background = new ImageIcon(Main.class.getResource("../images/result.jpg")).getImage();
+	
+	private Image selectedImage;
 
 	private Image noteRouteZImage = noteRouteImage_4B;
 	private Image noteRouteXImage = noteRouteImage_4B;
@@ -47,159 +51,236 @@ public class Game extends Thread {
 	private String difficulty;
 	private String musicTitle;
 	private Music gameMusic;
-
+	
 	ArrayList<Note> noteList = new ArrayList<Note>();
 
-	public Game(String titleName, String difficulty, String musicTitle) {
+	double score = 0.0;
+	private boolean isResultScreen = false;
+	private int nowSelected = 0;
+	
+	private int perfectCount = 0;
+	private int CoolCount = 0;
+	private int GoodCount = 0;
+	private int EarlyCount = 0;
+	private int LateCount = 0;
+	private int MissCount = 0;
+	
+	private double rate = 0.00; // 실제 표기
+	private double noteCount = 0.00; // 계산 수식
+	
+	private final DecimalFormat df = new DecimalFormat("0.00");
+	private String ratingGrade = "";
+
+	public Game(String titleName, String difficulty, String musicTitle, int nowSelected) {
 		this.titleName = titleName;
 		this.difficulty = difficulty;
 		this.musicTitle = musicTitle;
+		this.nowSelected = nowSelected;
 		gameMusic = new Music(this.musicTitle, false);
-
 	}
 
 	public void screenDraw(Graphics2D g) {
-		switch (keyNumber) {
-		case 4:
+		if (isResultScreen) {
+			g.drawImage(background, 0, 0, null);
+			g.drawImage(selectedImage, 100, 50, null);
+			g.setFont(new Font("Elephant", Font.BOLD, 40));
+			g.setColor(Color.YELLOW);
+			g.drawString("Perfect : " + perfectCount, 800, 100);
+			g.setColor(Color.blue);
+			g.drawString("Cool : " + CoolCount, 800, 150);
+			g.setColor(Color.ORANGE);
+			g.drawString("Good : " + GoodCount, 800, 200);
+			g.setColor(Color.GREEN);
+			g.drawString("Early : " + EarlyCount, 800, 250);
+			g.setColor(Color.RED);
+			g.drawString("Late : " + LateCount, 800, 300);
+			g.setColor(Color.gray);
+			g.drawString("Miss : " + MissCount, 800, 350);
 
-			g.drawImage(noteRouteXImage, 250, 30, null); // 1
-			g.drawImage(noteRouteCImage, 454, 30, null); // 2
-			g.drawImage(noteRouteCommaImage, 658, 30, null); // 3
-			g.drawImage(noteRoutePeriodImage, 862, 30, null); // 4
-
-			g.drawImage(noteRouteLineImage, 246, 30, null);
-			g.drawImage(noteRouteLineImage, 450, 30, null);
-			g.drawImage(noteRouteLineImage, 654, 30, null);
-			g.drawImage(noteRouteLineImage, 858, 30, null);
-			g.drawImage(noteRouteLineImage, 1062, 30, null);
-
-			break;
-
-		case 5:
-			g.drawImage(noteRouteXImage, 250, 30, null); // 1
-			g.drawImage(noteRouteCImage, 411, 30, null); // 2
-			g.drawImage(noteRouteSpaceImage, 572, 30, null); // 3
-			g.drawImage(noteRouteCommaImage, 733, 30, null); // 4
-			g.drawImage(noteRoutePeriodImage, 894, 30, null); // 5
-
-			g.drawImage(noteRouteLineImage, 246, 30, null);
-			g.drawImage(noteRouteLineImage, 407, 30, null);
-			g.drawImage(noteRouteLineImage, 568, 30, null);
-			g.drawImage(noteRouteLineImage, 729, 30, null);
-			g.drawImage(noteRouteLineImage, 890, 30, null);
-			g.drawImage(noteRouteLineImage, 1051, 30, null);
-
-			break;
-
-		case 6:
-
-			g.drawImage(noteRouteZImage, 250, 30, null); // 1
-			g.drawImage(noteRouteXImage, 384, 30, null); // 2
-			g.drawImage(noteRouteCImage, 518, 30, null); // 3
-			g.drawImage(noteRouteCommaImage, 652, 30, null); // 4
-			g.drawImage(noteRoutePeriodImage, 786, 30, null); // 5
-			g.drawImage(noteRouteSlashImage, 920, 30, null); // 6
-
-			g.drawImage(noteRouteLineImage, 246, 30, null);
-			g.drawImage(noteRouteLineImage, 380, 30, null);
-			g.drawImage(noteRouteLineImage, 514, 30, null);
-			g.drawImage(noteRouteLineImage, 648, 30, null);
-			g.drawImage(noteRouteLineImage, 782, 30, null);
-			g.drawImage(noteRouteLineImage, 916, 30, null);
-			g.drawImage(noteRouteLineImage, 1050, 30, null);
-
-			break;
-
-		case 7:
-
-			g.drawImage(noteRouteZImage, 250, 30, null); // 1
-			g.drawImage(noteRouteXImage, 365, 30, null); // 2
-			g.drawImage(noteRouteCImage, 480, 30, null); // 3
-			g.drawImage(noteRouteSpaceImage, 595, 30, null); // 4
-			g.drawImage(noteRouteCommaImage, 710, 30, null); // 5
-			g.drawImage(noteRoutePeriodImage, 825, 30, null); // 6
-			g.drawImage(noteRouteSlashImage, 940, 30, null); // 7
-
-			g.drawImage(noteRouteLineImage, 246, 30, null);
-			g.drawImage(noteRouteLineImage, 361, 30, null);
-			g.drawImage(noteRouteLineImage, 476, 30, null);
-			g.drawImage(noteRouteLineImage, 591, 30, null);
-			g.drawImage(noteRouteLineImage, 706, 30, null);
-			g.drawImage(noteRouteLineImage, 821, 30, null);
-			g.drawImage(noteRouteLineImage, 936, 30, null);
-			g.drawImage(noteRouteLineImage, 1051, 30, null);
-
-			break;
-		default:
-			break;
-		}
-
-		g.drawImage(gameInfoImage, 0, 660, null);
-		g.drawImage(judgementLineImage, 0, 580, null);
-
-		for (int i = 0; i < noteList.size(); i++) {
-			Note note = noteList.get(i);
-			if (note.getY() > 620) {
-				judgeImage = new ImageIcon(Main.class.getResource("../images/Miss.png")).getImage();
-			}
-			if (!note.proceeded) {
-				noteList.remove(i);
-				i--;
+			g.setFont(new Font("Arial", Font.BOLD, 40));
+			g.setColor(Color.BLACK);
+			g.drawString(df.format(rate) + "%", 850, 500);
+			g.setFont(new Font("Arial", Font.BOLD, 60));
+			
+			if (score <= 600000) {
+				g.setColor(Color.gray);
+				ratingGrade = "FAILED";
+				
+			} else if (score <= 700000) {
+				g.setColor(Color.cyan);
+				ratingGrade = "C";
+			} else if (score <= 800000) {
+				g.setColor(Color.orange);
+				ratingGrade = "B";
+			} else if (score <= 900000) {
+				g.setColor(Color.RED);
+				ratingGrade = "A";
+			} else if (score <= 950000) {
+				g.setColor(Color.yellow);
+				ratingGrade = "S";
+			} else if (score <= 970000) {
+				g.setColor(Color.yellow);
+				ratingGrade = "S+";
+			} else if (score <= 990000) {
+				g.setColor(Color.yellow);
+				ratingGrade = "SS";
+			} else if (score < 1000000) {
+				g.setColor(Color.yellow);
+				ratingGrade = "SSS";
 			} else {
-				note.screenDraw(g);
+				g.setColor(Color.yellow);
+				ratingGrade = "All Perfect";
 			}
 			
-		}
+			g.drawString(ratingGrade, 850, 450);
+			
+			
+		} else {
+			switch (keyNumber) {
+			case 4:
 
-		g.setColor(Color.WHITE);
-		g.setFont(new Font("Arial", Font.BOLD, 30));
-		g.drawString(titleName, 15, 702);
-		g.drawString(difficulty, 1100, 702);
-		g.setFont(new Font("Elephant", Font.BOLD, 30));
-		g.drawString("000000", 565, 702);
-		g.drawImage(judgeImage, 460, 420, null);
+				g.drawImage(noteRouteXImage, 250, 30, null); // 1
+				g.drawImage(noteRouteCImage, 454, 30, null); // 2
+				g.drawImage(noteRouteCommaImage, 658, 30, null); // 3
+				g.drawImage(noteRoutePeriodImage, 862, 30, null); // 4
 
-		g.setColor(Color.DARK_GRAY);
-		g.setFont(new Font("Arial", Font.PLAIN, 30));
-		g.setRenderingHint(RenderingHints.KEY_TEXT_ANTIALIASING, RenderingHints.VALUE_TEXT_ANTIALIAS_ON);
+				g.drawImage(noteRouteLineImage, 246, 30, null);
+				g.drawImage(noteRouteLineImage, 450, 30, null);
+				g.drawImage(noteRouteLineImage, 654, 30, null);
+				g.drawImage(noteRouteLineImage, 858, 30, null);
+				g.drawImage(noteRouteLineImage, 1062, 30, null);
 
-		switch (keyNumber) {
-		case 4:
-			g.drawString("X", 350, 609);
-			g.drawString("C", 554, 609);
-			g.drawString(",", 758, 609);
-			g.drawString(".", 962, 609);
-			break;
+				break;
 
-		case 5:
-			g.drawString("X", 250 + 70, 609);
-			g.drawString("C", 411 + 70, 609);
-			g.drawString("SPACE", 572 + 30, 609);
-			g.drawString(",", 733 + 75, 609);
-			g.drawString(".", 894 + 75, 609);
-			break;
+			case 5:
+				g.drawImage(noteRouteXImage, 250, 30, null); // 1
+				g.drawImage(noteRouteCImage, 411, 30, null); // 2
+				g.drawImage(noteRouteSpaceImage, 572, 30, null); // 3
+				g.drawImage(noteRouteCommaImage, 733, 30, null); // 4
+				g.drawImage(noteRoutePeriodImage, 894, 30, null); // 5
 
-		case 6:
-			g.drawString("Z", 250 + 55, 609);
-			g.drawString("X", 384 + 55, 609);
-			g.drawString("C", 518 + 55, 609);
-			g.drawString(",", 652 + 55, 609);
-			g.drawString(".", 786 + 55, 609);
-			g.drawString("/", 920 + 55, 609);
-			break;
+				g.drawImage(noteRouteLineImage, 246, 30, null);
+				g.drawImage(noteRouteLineImage, 407, 30, null);
+				g.drawImage(noteRouteLineImage, 568, 30, null);
+				g.drawImage(noteRouteLineImage, 729, 30, null);
+				g.drawImage(noteRouteLineImage, 890, 30, null);
+				g.drawImage(noteRouteLineImage, 1051, 30, null);
 
-		case 7:
-			g.drawString("Z", 250 + 50, 609);
-			g.drawString("X", 365 + 50, 609);
-			g.drawString("C", 480 + 50, 609);
-			g.drawString("SPACE", 595 + 5, 609);
-			g.drawString(",", 710 + 50, 609);
-			g.drawString(".", 825 + 50, 609);
-			g.drawString("/", 940 + 50, 609);
-			break;
+				break;
 
-		default:
-			break;
+			case 6:
+
+				g.drawImage(noteRouteZImage, 250, 30, null); // 1
+				g.drawImage(noteRouteXImage, 384, 30, null); // 2
+				g.drawImage(noteRouteCImage, 518, 30, null); // 3
+				g.drawImage(noteRouteCommaImage, 652, 30, null); // 4
+				g.drawImage(noteRoutePeriodImage, 786, 30, null); // 5
+				g.drawImage(noteRouteSlashImage, 920, 30, null); // 6
+
+				g.drawImage(noteRouteLineImage, 246, 30, null);
+				g.drawImage(noteRouteLineImage, 380, 30, null);
+				g.drawImage(noteRouteLineImage, 514, 30, null);
+				g.drawImage(noteRouteLineImage, 648, 30, null);
+				g.drawImage(noteRouteLineImage, 782, 30, null);
+				g.drawImage(noteRouteLineImage, 916, 30, null);
+				g.drawImage(noteRouteLineImage, 1050, 30, null);
+
+				break;
+
+			case 7:
+
+				g.drawImage(noteRouteZImage, 250, 30, null); // 1
+				g.drawImage(noteRouteXImage, 365, 30, null); // 2
+				g.drawImage(noteRouteCImage, 480, 30, null); // 3
+				g.drawImage(noteRouteSpaceImage, 595, 30, null); // 4
+				g.drawImage(noteRouteCommaImage, 710, 30, null); // 5
+				g.drawImage(noteRoutePeriodImage, 825, 30, null); // 6
+				g.drawImage(noteRouteSlashImage, 940, 30, null); // 7
+
+				g.drawImage(noteRouteLineImage, 246, 30, null);
+				g.drawImage(noteRouteLineImage, 361, 30, null);
+				g.drawImage(noteRouteLineImage, 476, 30, null);
+				g.drawImage(noteRouteLineImage, 591, 30, null);
+				g.drawImage(noteRouteLineImage, 706, 30, null);
+				g.drawImage(noteRouteLineImage, 821, 30, null);
+				g.drawImage(noteRouteLineImage, 936, 30, null);
+				g.drawImage(noteRouteLineImage, 1051, 30, null);
+
+				break;
+			default:
+				break;
+			}
+
+			g.drawImage(gameInfoImage, 0, 660, null);
+			g.drawImage(judgementLineImage, 0, 580, null);
+
+			for (int i = 0; i < noteList.size(); i++) {
+				Note note = noteList.get(i);
+				if (note.getY() > 680) {
+					judgeImage = new ImageIcon(Main.class.getResource("../images/Miss.png")).getImage();
+					judgeEvent("Miss");
+				}
+				if (!note.proceeded) {
+					noteList.remove(i);
+					i--;
+				} else {
+					note.screenDraw(g);
+				}
+
+			}
+
+			g.setRenderingHint(RenderingHints.KEY_TEXT_ANTIALIASING, RenderingHints.VALUE_TEXT_ANTIALIAS_ON);
+			g.setColor(Color.WHITE);
+			g.setFont(new Font("Arial", Font.PLAIN, 20));
+			g.drawString(df.format(rate) + "%", 640, 420);
+			g.setFont(new Font("Arial", Font.BOLD, 30));
+			g.drawString(titleName, 15, 702);
+			g.drawString(difficulty, 1100, 702);
+			g.setFont(new Font("Elephant", Font.BOLD, 30));
+			g.drawString(Integer.toString((int) (score)), 565, 702); // SCORE
+			g.drawImage(judgeImage, 460, 420, null);
+
+			g.setColor(Color.DARK_GRAY);
+			g.setFont(new Font("Arial", Font.PLAIN, 30));
+
+			switch (keyNumber) {
+			case 4:
+				g.drawString("X", 350, 609);
+				g.drawString("C", 554, 609);
+				g.drawString(",", 758, 609);
+				g.drawString(".", 962, 609);
+				break;
+
+			case 5:
+				g.drawString("X", 250 + 70, 609);
+				g.drawString("C", 411 + 70, 609);
+				g.drawString("SPACE", 572 + 30, 609);
+				g.drawString(",", 733 + 75, 609);
+				g.drawString(".", 894 + 75, 609);
+				break;
+
+			case 6:
+				g.drawString("Z", 250 + 55, 609);
+				g.drawString("X", 384 + 55, 609);
+				g.drawString("C", 518 + 55, 609);
+				g.drawString(",", 652 + 55, 609);
+				g.drawString(".", 786 + 55, 609);
+				g.drawString("/", 920 + 55, 609);
+				break;
+
+			case 7:
+				g.drawString("Z", 250 + 50, 609);
+				g.drawString("X", 365 + 50, 609);
+				g.drawString("C", 480 + 50, 609);
+				g.drawString("SPACE", 595 + 5, 609);
+				g.drawString(",", 710 + 50, 609);
+				g.drawString(".", 825 + 50, 609);
+				g.drawString("/", 940 + 50, 609);
+				break;
+
+			default:
+				break;
+			}
 		}
 
 	}
@@ -545,11 +626,13 @@ public class Game extends Thread {
 	public void close() {
 		gameMusic.close();
 		this.interrupt();
+		isResultScreen = true;
+		selectedImage = new ImageIcon(Main.class.getResource("../images/" + VectroBeat.trackList.get(nowSelected).getStartImage())).getImage();
 	}
 
-	public void dropNotes(String titleName) {
+	Beat[] beats = null;
 
-		Beat[] beats = null;
+	public void dropNotes(String titleName) {
 
 		if (titleName.equals("School Song (SangilMedia ver.)")) {
 
@@ -586,7 +669,7 @@ public class Game extends Thread {
 				beats = new Beat[] { new Beat(startTime, "C", 4) };
 			}
 		} else if (titleName.equals("Invincible")) {
-			
+
 			int startTime = 1000 - (Main.REACH_TIME * 1000);
 
 			if (difficulty.equals("Easy")) {
@@ -603,9 +686,9 @@ public class Game extends Thread {
 				beats = new Beat[] { new Beat(startTime, "C", 4) };
 			}
 		} else if (titleName.equals("ouroboros -twin stroke of the end-")) {
-			
+
 			int startTime = 1000 - (Main.REACH_TIME * 1000);
-			
+
 			if (difficulty.equals("Easy")) {
 				int gap = 125;
 				beats = new Beat[] { new Beat(startTime, "C", 4) };
@@ -619,17 +702,17 @@ public class Game extends Thread {
 				int gap = 125;
 				beats = new Beat[] { new Beat(startTime, "C", 4) };
 			}
-			
+
 		} else if (titleName.equals("Toxic Vibration")) {
-			
-			int startTime = 3500 - (Main.REACH_TIME * 1000);
+
+			int startTime = 3400 - (Main.REACH_TIME * 1000);
 			int gap = 76;
-			
+
 			if (difficulty.equals("Easy")) {
-				beats = new Beat[] {
-						new Beat(startTime + gap * 0, "X", 4),
+				beats = new Beat[] { 
+						new Beat(startTime + gap * 0, "X", 4), 
 						new Beat(startTime + gap * 16, "C", 4),
-						new Beat(startTime + gap * 32, ",", 4),
+						new Beat(startTime + gap * 32, ",", 4), 
 						new Beat(startTime + gap * 48, ".", 4),
 						new Beat(startTime + gap * 64, "X", 4),
 						new Beat(startTime + gap * 72, "C", 4),
@@ -651,69 +734,70 @@ public class Game extends Thread {
 						new Beat(startTime + gap * 160, ".", 5),
 						new Beat(startTime + gap * 168, ",", 5),
 						new Beat(startTime + gap * 176, "SPACE", 5),
-						new Beat(startTime + gap * 184, "C", 5)
-						};
+						new Beat(startTime + gap * 184, "C", 5),
+				};
 			} else if (difficulty.equals("Normal")) {
-				beats = new Beat[] {
-						new Beat(startTime + gap * 0, "X", 4),
+				beats = new Beat[] { new Beat(startTime + gap * 0, "X", 4), 
 						new Beat(startTime + gap * 0, "C", 4),
-						new Beat(startTime + gap * 16, "C", 4),
+						new Beat(startTime + gap * 16, "C", 4), 
 						new Beat(startTime + gap * 16, ",", 4),
-						new Beat(startTime + gap * 32, ",", 4),
+						new Beat(startTime + gap * 32, ",", 4), 
 						new Beat(startTime + gap * 32, ".", 4),
-						new Beat(startTime + gap * 48, "X", 4),
+						new Beat(startTime + gap * 48, "X", 4), 
 						new Beat(startTime + gap * 48, ",", 4),
-						new Beat(startTime + gap * 64, "X", 4),
+						new Beat(startTime + gap * 64, "X", 4), 
 						new Beat(startTime + gap * 68, "C", 4),
-						new Beat(startTime + gap * 72, ",", 4),
+						new Beat(startTime + gap * 72, ",", 4), 
 						new Beat(startTime + gap * 76, ".", 4),
-						new Beat(startTime + gap * 80, "X", 4),
+						new Beat(startTime + gap * 80, "X", 4), 
 						new Beat(startTime + gap * 84, "C", 4),
-						new Beat(startTime + gap * 88, ",", 4),
+						new Beat(startTime + gap * 88, ",", 4), 
 						new Beat(startTime + gap * 92, ".", 4),
-						new Beat(startTime + gap * 96, "X", 4),
+						new Beat(startTime + gap * 96, "X", 4), 
 						new Beat(startTime + gap * 98, "X", 4),
-						new Beat(startTime + gap * 100, "C", 4),
+						new Beat(startTime + gap * 100, "C", 4), 
 						new Beat(startTime + gap * 102, "C", 4),
-						new Beat(startTime + gap * 104, ",", 4),
+						new Beat(startTime + gap * 104, ",", 4), 
 						new Beat(startTime + gap * 106, ",", 4),
-						new Beat(startTime + gap * 108, ".", 4),
-						new Beat(startTime + gap * 110, ".", 4)
+						new Beat(startTime + gap * 108, ".", 4), 
+						new Beat(startTime + gap * 110, ".", 4) 
 						};
 			} else if (difficulty.equals("Hard")) {
-				beats = new Beat[] {
-						new Beat(startTime + gap * 0, "X", 4), 
-						new Beat(startTime + gap * 4, "C", 4), 
+				beats = new Beat[] { 
+						new Beat(startTime + gap * 0, "X", 4),
+						new Beat(startTime + gap * 4, "C", 4),
 						new Beat(startTime + gap * 8, ",", 4), 
 						new Beat(startTime + gap * 12, ".", 4) 
 						};
 			} else if (difficulty.equals("Crazy")) {
-				beats = new Beat[] {
-						new Beat(startTime + gap * 0, "C", 4),
+				beats = new Beat[] { 
+						new Beat(startTime + gap * 0, "C", 4), 
 						new Beat(startTime + gap * 4, "C", 4),
-						new Beat(startTime + gap * 8, "C", 4),
-						new Beat(startTime + gap * 12, "C", 4)
+						new Beat(startTime + gap * 8, "C", 4), 
+						new Beat(startTime + gap * 12, "C", 4) 
 						};
 			}
-			
+
 		}
 		int i = 0;
 
 		gameMusic.start();
-		
-		new Thread( ()-> {
+
+		new Thread(() -> {
 			while (true) {
-				judge("Plus");
-				judge("Minus");
+				if (!isInterrupted()) {
+					judge("Plus");
+					judge("Minus");
+				}
 				try {
-					Thread.sleep(20);
+					Thread.sleep(40);
 				} catch (Exception e) {
 					// TODO: handle exception
 				}
 			}
-			
-		} ).start();
-		
+
+		}).start();
+
 		while (i < beats.length && !isInterrupted()) {
 			boolean dropped = false;
 
@@ -732,10 +816,19 @@ public class Game extends Thread {
 					e.printStackTrace();
 				}
 			}
+			if (i == beats.length) {
+				try {
+					Thread.sleep(4000);
+				} catch (Exception e) {
+					// TODO: handle exception
+				}
+				// isResultScreen = true;
+				close();
+			}
 		}
-		
+
 	}
-	
+
 	public void judge(String input) {
 		for (int i = 0; i < noteList.size(); i++) {
 			Note note = noteList.get(i);
@@ -743,31 +836,74 @@ public class Game extends Thread {
 				String value = note.judge();
 				judgeEvent(value);
 				if (value.equals("Plus")) {
-					keyNumber--;
-					setKeyNumber(keyNumber);
-				}
-				else if (value.equals("Minus")) {
 					keyNumber++;
+					setKeyNumber(keyNumber);
+				} else if (value.equals("Minus")) {
+					keyNumber--;
 					setKeyNumber(keyNumber);
 				}
 				break;
 			}
 		}
 	}
-	
+
 	public void judgeEvent(String judge) {
 		if (judge.equals("Miss")) {
 			judgeImage = new ImageIcon(Main.class.getResource("../images/Miss.png")).getImage();
+			score += (1000000.0 / beats.length) * 0;
+			MissCount++;
+			noteCount++;
+			
+			System.out.println(MissCount);
+
+			if (score != 0) {
+				rate = score / (1000000.0 / beats.length * noteCount) * 100;
+			}
 		} else if (judge.equals("Early")) {
 			judgeImage = new ImageIcon(Main.class.getResource("../images/Early.png")).getImage();
+			score += (1000000.0 / beats.length) * 0.4;
+			EarlyCount++;
+			noteCount++;
+			
+			if (score != 0) {
+				rate = score / (1000000.0 / beats.length * noteCount) * 100;
+			}
 		} else if (judge.equals("Late")) {
 			judgeImage = new ImageIcon(Main.class.getResource("../images/Late.png")).getImage();
+			score += (1000000.0 / beats.length) * 0.4;
+			LateCount++;
+			noteCount++;
+			
+			if (score != 0) {
+				rate = score / (1000000.0 / beats.length * noteCount) * 100;
+			}
 		} else if (judge.equals("Good")) {
 			judgeImage = new ImageIcon(Main.class.getResource("../images/Good.png")).getImage();
+			score += (1000000.0 / beats.length) * 0.7;
+			GoodCount++;
+			noteCount++;
+			
+			if (score != 0) {
+				rate = score / (1000000.0 / beats.length * noteCount) * 100;
+			}
 		} else if (judge.equals("Cool")) {
 			judgeImage = new ImageIcon(Main.class.getResource("../images/Cool.png")).getImage();
-		} else if (judge.equals("Perfect")) {
+			score += (1000000.0 / beats.length) * 0.9;
+			CoolCount++;
+			noteCount++;
+			
+			if (score != 0) {
+				rate = score / (1000000.0 / beats.length * noteCount) * 100;
+			}
+		} else if (judge.equals("Perfect") || judge.equals("Plus") || judge.equals("Minus")) {
 			judgeImage = new ImageIcon(Main.class.getResource("../images/Perfect.png")).getImage();
+			score += (1000000.0 / beats.length) * 1;
+			perfectCount++;
+			noteCount++;
+
+			if (score != 0) {
+				rate = score / (1000000.0 / beats.length * noteCount) * 100;
+			}
 		}
 	}
 }
