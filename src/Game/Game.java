@@ -216,16 +216,22 @@ public class Game extends Thread {
 			g.drawImage(gameInfoImage, 0, 660, null);
 			g.drawImage(judgementLineImage, 0, 580, null);
 
+			// 노트 리스트 불러오기
 			for (int i = 0; i < noteList.size(); i++) {
 				Note note = noteList.get(i);
+				// 노트가 판정선을 심각하게 벗어나면
 				if (note.getY() > 680) {
-					judgeImage = new ImageIcon(Main.class.getResource("../images/Miss.png")).getImage();
+					judgeImage = new ImageIcon(Main.class.getResource(
+							"../images/Miss.png")).getImage();
 					judgeEvent("Miss");
 				}
+				// 노트가 활성화 상태가 아니라면
 				if (!note.proceeded) {
+					// 리스트에서 해당 노트 remove
 					noteList.remove(i);
 					i--;
 				} else {
+					// 노트를 스크린에 그려주며, 지속적으로 값을 갱신한다.
 					note.screenDraw(g);
 				}
 
@@ -1847,14 +1853,20 @@ public class Game extends Thread {
 	}
 
 	public void judge(String input) {
+		// 노트 리스트를 한바퀴 돈다.
 		for (int i = 0; i < noteList.size(); i++) {
-			Note note = noteList.get(i);
+			Note note = noteList.get(i); // 노트 PICK!
+			
+			// 키 개수는 4개인데 5키 노트로 입력되는 현상을 방지
 			if (input.equals(note.getKey())) {
-				String value = note.judge();
-				judgeEvent(value);
+				String value = note.judge(); // 노트의 판정
+				judgeEvent(value); // 판정에 대한 이벤트
+				
+				// KEY+ 이라면
 				if (value.equals("Plus")) {
 					keyNumber++;
 					setKeyNumber(keyNumber);
+				// KEY- 이라면
 				} else if (value.equals("Minus")) {
 					keyNumber--;
 					setKeyNumber(keyNumber);

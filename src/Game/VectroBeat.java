@@ -64,8 +64,14 @@ public class VectroBeat extends JFrame {
 	
 	public VectroBeat() {
 		
-		trackList.add(new Track("sangil_title.png", "sangil_start.jpg", "sangil_game.jpg", 
-				"sangil_song cut.mp3", "sangil_song.mp3", "School Song (SangilMedia ver.)"));
+		// 트랙에 [ 타이틀 사진, 인게임 소개 사진, 하이라이트 곡, 곡 풀버전, 타이틀 이름 ] 추가
+		trackList.add(new Track("sangil_title.png", 
+				"sangil_start.jpg", 
+				"sangil_game.jpg", 
+				"sangil_song cut.mp3", 
+				"sangil_song.mp3", 
+				"School Song (SangilMedia ver.)"));
+		// 선택 가능한 난이도
 		difficulty_Array.add(new Difficulty(true, true, true, true));
 		
 		trackList.add(new Track("Light It Up_title.png", "Light It Up_start.jpg", "Light It Up_game.jpg", 
@@ -100,23 +106,27 @@ public class VectroBeat extends JFrame {
 		introMusic.start();
 
 		// exitButton
-		exitButton.setBounds(1245, 0, 30, 30);
-		exitButton.setBorderPainted(false);
-		exitButton.setContentAreaFilled(false);
-		exitButton.setFocusPainted(false);
-		exitButton.addMouseListener(new MouseAdapter() {
+		exitButton.setBounds(1245, 0, 30, 30); // 좌표
+		exitButton.setBorderPainted(false); // 외곽선 제거
+		exitButton.setContentAreaFilled(false); // 내용 제거
+		exitButton.setFocusPainted(false); // 외곽선 제거
+		exitButton.addMouseListener(new MouseAdapter() { // 클릭이벤트
 			public void mouseEntered(MouseEvent e) {
+				// 커서 변경
 				exitButton.setCursor(new Cursor(Cursor.HAND_CURSOR));
 			}
 			public void mouseExited(MouseEvent e) {
+				// 커서 변경
 				exitButton.setCursor(new Cursor(Cursor.DEFAULT_CURSOR));
 			}
 			public void mousePressed(MouseEvent e) {
 				try {
+					// 1초 쉬었다가
 					Thread.sleep(1000);
 				} catch (InterruptedException ex) {
 					ex.printStackTrace();
 				}
+				// 프로그램 종료
 				System.exit(0);
 			}
 		});
@@ -279,18 +289,23 @@ public class VectroBeat extends JFrame {
 		
 
 		// startButton
-		startButton.setBounds(800, 200, 400, 100);
-		startButton.setBorderPainted(false);
-		startButton.setContentAreaFilled(false);
-		startButton.setFocusPainted(false);
+		startButton.setBounds(800, 200, 400, 100); // 좌표
+		startButton.setBorderPainted(false); // 외곽선 제거
+		startButton.setContentAreaFilled(false); // 빈칸 제거
+		startButton.setFocusPainted(false); // 외곽선 제거
+		
+		// 마우스 관련 이벤트 추가
 		startButton.addMouseListener(new MouseAdapter() {
 			public void mouseEntered(MouseEvent e) {
+				// 마우스가 버튼 안에 들어오면 커서 변경
 				startButton.setCursor(new Cursor(Cursor.HAND_CURSOR));
 			}
 			public void mouseExited(MouseEvent e) {
+				// 마우스가 버튼을 빠져나가면 커서 변경
 				startButton.setCursor(new Cursor(Cursor.DEFAULT_CURSOR));
 			}
 			public void mousePressed(MouseEvent e) {
+				// 메인화면으로 이동
 				enterMain();
 			}
 		});
@@ -358,40 +373,46 @@ public class VectroBeat extends JFrame {
 	}
 	
 	public void selectTrack(int nowSelected) {
+		// 선택된 이미지가 있으면
 		if (selectedImage != null) {
+			// 실행중인 음악 종료
 			selectedMusic.close();
 		}
-		titleImage = new ImageIcon(Main.class.getResource("../images/" + trackList.get(nowSelected).getTitleImage())).getImage();
-		selectedImage = new ImageIcon(Main.class.getResource("../images/" + trackList.get(nowSelected).getStartImage())).getImage();
+		
+		// 이미지, 음악 불러오기
+		titleImage = new ImageIcon(Main.class.getResource(
+				"../images/" + trackList.get(nowSelected).getTitleImage())).getImage();
+		selectedImage = new ImageIcon(Main.class.getResource(
+				"../images/" + trackList.get(nowSelected).getStartImage())).getImage();
 		selectedMusic = new Music(trackList.get(nowSelected).getStartMusic(), true);
 
+		// 난이도 선택버튼 보이기 여부
 		easyButton.setVisible(difficulty_Array.get(nowSelected).easy);
 		normalButton.setVisible(difficulty_Array.get(nowSelected).normal);
 		hardButton.setVisible(difficulty_Array.get(nowSelected).hard);
 		crazyButton.setVisible(difficulty_Array.get(nowSelected).crazy);
 		
+		// 뮤직 스타트
 		selectedMusic.start();
 	}
 	
-	// 왼쪽 곡 선택
+	// 왼쪽 곡으로 이동
 	public void selectLeft() {
 		if (nowSelected == 0) {
 			nowSelected = trackList.size() - 1;
 		} else {
 			nowSelected--;
 		}
-		
 		selectTrack(nowSelected);
 	}
 	
-	// 오른쪽 곡 선택
+	// 오른쪽 곡으로 이동
 	public void selectRight() {
 		if (nowSelected == trackList.size() - 1) {
 			nowSelected = 0;
 		} else {
 			nowSelected++;
 		}
-		
 		selectTrack(nowSelected);
 	}
 	
