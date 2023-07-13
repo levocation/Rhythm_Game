@@ -70,7 +70,7 @@ public class VectroBeat extends JFrame {
 		
 		trackList.add(new Track("Light It Up_title.png", "Light It Up_start.jpg", "Light It Up_game.jpg", 
 				"Light It Up cut.mp3", "Robin Hustin x TobiMorrow - Light It Up.mp3", "Light It Up"));
-		difficulty_Array.add(new Difficulty(true, false, false, true));
+		difficulty_Array.add(new Difficulty(false, true, false, true));
 		
 		trackList.add(new Track("Invincible_title.png", "Invincible_start.jpg", "Invincible_game.jpg", 
 				"Invincible cut.mp3", "DEAF KEV - Invincible.mp3", "Invincible"));
