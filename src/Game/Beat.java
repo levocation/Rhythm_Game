@@ -5,6 +5,8 @@ public class Beat {
 	private String noteName;
 	private int keyNumber;
 	
+	public static int thisTime;
+	
 	public Beat(int time, String noteName, int keyNumber) {
 		super();
 		this.time = time;

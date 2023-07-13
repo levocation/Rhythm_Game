@@ -60,18 +60,30 @@ public class VectroBeat extends JFrame {
 	
 	public static Game game;
 	
+	public ArrayList<Difficulty> difficulty_Array = new ArrayList<Difficulty>();
+	
 	public VectroBeat() {
 		
 		trackList.add(new Track("sangil_title.png", "sangil_start.jpg", "sangil_game.jpg", 
 				"sangil_song cut.mp3", "sangil_song.mp3", "School Song (SangilMedia ver.)"));
+		difficulty_Array.add(new Difficulty(true, true, true, true));
+		
 		trackList.add(new Track("Light It Up_title.png", "Light It Up_start.jpg", "Light It Up_game.jpg", 
 				"Light It Up cut.mp3", "Robin Hustin x TobiMorrow - Light It Up.mp3", "Light It Up"));
+		difficulty_Array.add(new Difficulty(true, false, false, true));
+		
 		trackList.add(new Track("Invincible_title.png", "Invincible_start.jpg", "Invincible_game.jpg", 
 				"Invincible cut.mp3", "DEAF KEV - Invincible.mp3", "Invincible"));
-		trackList.add(new Track("ouroboros_title.png", "ouroboros_start.png", "ouroboros_game.jpg", 
-				"ouroboros cut.mp3", "Cranky VS MASAKI - ouroboros twin stroke of the end.mp3", "ouroboros -twin stroke of the end-"));
+		difficulty_Array.add(new Difficulty(true, false, true, false));
+		
+		trackList.add(new Track("Heart of Witch_title.png", "heart of witch_start.jpg", "heart of witch_game.jpg", 
+				"Heart of Witch cut.mp3", "ReX - Heart of Witch.mp3", "Heart of Witch"));
+		difficulty_Array.add(new Difficulty(true, false, true, true));
+		
 		trackList.add(new Track("Toxic vibration_title.png", "Toxic vibration_start.png", "Toxic vibration_game.jpg", 
 				"Toxic vibration cut.mp3", "BEMANI - TOXIC VIBRATION.mp3", "Toxic Vibration"));
+		difficulty_Array.add(new Difficulty(false, false, false, true));
+		
 		
 		setUndecorated(true); // 메뉴바가 안보이게 됨
 		setTitle("VectroBeat");
@@ -86,7 +98,7 @@ public class VectroBeat extends JFrame {
 		addKeyListener(new KeyListener());
 		
 		introMusic.start();
-		
+
 		// exitButton
 		exitButton.setBounds(1245, 0, 30, 30);
 		exitButton.setBorderPainted(false);
@@ -352,6 +364,12 @@ public class VectroBeat extends JFrame {
 		titleImage = new ImageIcon(Main.class.getResource("../images/" + trackList.get(nowSelected).getTitleImage())).getImage();
 		selectedImage = new ImageIcon(Main.class.getResource("../images/" + trackList.get(nowSelected).getStartImage())).getImage();
 		selectedMusic = new Music(trackList.get(nowSelected).getStartMusic(), true);
+
+		easyButton.setVisible(difficulty_Array.get(nowSelected).easy);
+		normalButton.setVisible(difficulty_Array.get(nowSelected).normal);
+		hardButton.setVisible(difficulty_Array.get(nowSelected).hard);
+		crazyButton.setVisible(difficulty_Array.get(nowSelected).crazy);
+		
 		selectedMusic.start();
 	}
 	
